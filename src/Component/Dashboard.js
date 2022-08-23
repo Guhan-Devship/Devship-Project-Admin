@@ -28,11 +28,11 @@ function Dashboard() {
       color3: true,
       link3: true,
     },
-    // {
-    //   title: "Admin",
-    //   color2: true,
-    //   link4: true,
-    // },
+    {
+      title: "Contact",
+      color4: true,
+      link4: true,
+    },
   ];
   return (
     <>

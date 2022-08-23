@@ -32,6 +32,7 @@ function Login() {
       } else if (data.data.response.admin === true) {
         window.localStorage.setItem("myapptoken", data.data.response.authToken);
         window.localStorage.setItem("name", data.data.response.name);
+        window.localStorage.setItem("id", data.data.response.id);
         navigate("/home");
       }
     }

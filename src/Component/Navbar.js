@@ -1,14 +1,28 @@
-import React, { useEffect } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
+  const [userData, setUserData] = useState([]);
   let navigate = useNavigate();
   let handleLogout = () => {
     window.localStorage.removeItem("myapptoken", "name");
     navigate("/");
   };
+  let userId = window.localStorage.getItem("id");
+  async function fetchData() {
+    let user = await axios.get(`http://localhost:2022/getUser/${userId}`, {
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    });
+    console.log(user.data);
+    setUserData(user.data);
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  let user = window.localStorage.getItem("name");
   let mobile = window.localStorage.getItem("mobile");
   return (
     <>
@@ -39,6 +53,9 @@ function Navbar() {
               <Link to={"/order"} class="dropdown-item">
                 Orders
               </Link>
+              <Link to={"/contact"} class="dropdown-item">
+                Contact
+              </Link>
               <div role="separator" class="dropdown-divider"></div>
             </div>
           </li>
@@ -54,10 +71,17 @@ function Navbar() {
               aria-expanded="false"
             >
               <i class="fa fa-user" aria-hidden="true"></i>
-              {user}
+              {userData.first_name}
             </a>
             <div class="dropdown-menu">
-              <a class="dropdown-item">{user}</a>
+              <a class="dropdown-item">{userData.first_name}</a>
+              <a class="dropdown-item">{userData.phone}</a>
+              <a class="dropdown-item">{userData.email}</a>
+              <Link to={"/profile"}>
+                <button className="btn btn-primary btn-sm mt-2 ms-2">
+                  Edit
+                </button>
+              </Link>
               <div role="separator" class="dropdown-divider"></div>
               <a class="dropdown-item text-danger" onClick={handleLogout}>
                 Logout

@@ -15,6 +15,11 @@ import ViewProduct from "./Pages/product/ViewProduct";
 import EditProduct from "./Pages/product/EditProduct";
 import ViewUser from "./Pages/user/ViewUser";
 import Order from "./Pages/order/Oder";
+import Profile from "./Pages/profile/Profile";
+import Contact from "./Pages/contact/Contact";
+import CreateContact from "./Pages/contact/CreateContact";
+import ViewContact from "./Pages/contact/ViewConatct";
+import EditContact from "./Pages/contact/EditContact";
 
 function App() {
   return (
@@ -22,6 +27,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/users" element={<User />} />
         <Route path="/create-user" element={<CreateUser />} />
         <Route path="/edit-user/:id" element={<EditUser />} />
@@ -33,6 +39,10 @@ function App() {
         <Route path="/viewList/:id" element={<ViewProduct />} />
         <Route path="/editList/:id" element={<EditProduct />} />
         <Route path="/order" element={<Order />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/create-contact" element={<CreateContact />} />
+        <Route path="/view-contact/:id" element={<ViewContact />} />
+        <Route path="/edit-contact/:id" element={<EditContact />} />
       </Routes>
     </BrowserRouter>
   );

@@ -12,6 +12,8 @@ function DashboardCard(props) {
             ? "card bg-warning text-white mb-4"
             : props.card.color3
             ? "card bg-success text-white mb-4"
+            : props.card.color4
+            ? "card bg-secondary text-white mb-4"
             : null
         }
       >
@@ -27,7 +29,7 @@ function DashboardCard(props) {
                 : props.card.link3
                 ? "/order"
                 : props.card.link4
-                ? "/admin"
+                ? "/contact"
                 : ""
             }
             class="small text-white stretched-link"

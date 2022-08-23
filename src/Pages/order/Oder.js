@@ -21,7 +21,7 @@ function Order() {
         },
       });
       setOrder(listData.data);
-      console.log(listData);
+      console.log(listData.data);
     } catch (error) {
       alert("Something went wrong");
     }
