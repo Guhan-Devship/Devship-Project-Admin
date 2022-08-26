@@ -21,80 +21,88 @@ function EditContact() {
     theme: "dark",
   };
   const [inputFields, setInputField] = useState([]);
+  const [addAddress, setAddAddress] = useState([]);
   const [credentials, setCredentials] = useState({
-    title: "",
-    desc: "",
-    model: "",
-    category: "",
-    price: "",
-    offerPrice: "",
-    stockAvailability: "",
+    name: "",
+    organisation: "",
+    gender: "",
+    mobile: "",
+    email: "",
+    message: "",
+    address: [inputFields],
   });
   const handleChange = (e) => {
     const id = e.target.id;
     const value = e.target.value;
-
     setCredentials((prevState) => ({
       ...prevState,
       [id]: value,
     }));
   };
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        let editdata = await axios.get(
-          `http://localhost:2022/getContact/${params.id}`,
-          {
-            headers: {
-              Authorization: window.localStorage.getItem("myapptoken"),
-            },
-          }
-        );
-        editdata.data.map((items) => {
-          return setCredentials({
-            name: items.name,
-            organisation: items.organisation,
-            gender: items.gender,
-            mobile: items.mobile,
-            email: items.email,
-            message: items.message,
-          });
-        });
-      } catch (error) {
-        console.log(error);
-      }
+
+  async function fetchData() {
+    try {
+      let editdata = await axios.get(
+        `http://localhost:2022/getContact/${params.id}`,
+        {
+          headers: {
+            Authorization: window.localStorage.getItem("myapptoken"),
+          },
+        }
+      );
+      setCredentials(editdata.data);
+    } catch (error) {
+      console.log(error);
     }
+  }
+
+  useEffect(() => {
     fetchData();
   }, []);
+
   useEffect(() => {
     fetch();
   }, []);
+
   const handleUpdate = async () => {
-    const updateData = await axios
-      .put(`http://localhost:2022/updateContact/${params.id}`, credentials, {
-        headers: {
-          Authorization: window.localStorage.getItem("myapptoken"),
-        },
-      })
-      .then((res) => {
-        toast.success("Updated", toastOptions);
-        navigate("/contact", { replace: true });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (handleValidation()) {
+      const updateData = await axios
+        .put(`http://localhost:2022/updateContact/${params.id}`, credentials, {
+          headers: {
+            Authorization: window.localStorage.getItem("myapptoken"),
+          },
+        })
+        .then((res) => {
+          toast.success("Updated", toastOptions);
+          // navigate("/contact", { replace: true });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log(credentials);
+    }
+  };
+
+  const handleChangeOutput = (index, event) => {
+    const values = [...credentials.address];
+    values[index][event.target.id] = event.target.value;
+    console.log(values);
+    setInputField(values);
+    // credentials.address = JSON.stringify([inputFields]);
   };
 
   const handleChangeInput = (index, event) => {
-    const values = [...inputFields];
+    const values = [...addAddress];
     values[index][event.target.id] = event.target.value;
-    setInputField(values);
+    setAddAddress(values);
+    console.log(values);
+    // cre.address = JSON.stringify([...values]);
   };
 
   const handleAddField = (e) => {
     e.preventDefault();
-    setInputField([
-      ...inputFields,
+    setAddAddress([
+      ...addAddress,
       {
         line1: "",
         line2: "",
@@ -107,9 +115,16 @@ function EditContact() {
   };
 
   const handleRemoveField = (index) => {
-    const values = [...inputFields];
+    const values = [...addAddress];
     values.splice(index, 1);
-    setInputField(values);
+    setAddAddress(values);
+  };
+
+  const handleRemove = (index, e) => {
+    e.preventDefault();
+    const values = [...credentials.address];
+    values.splice(index, 1);
+    console.log(values);
   };
 
   const handleValidation = () => {
@@ -136,29 +151,6 @@ function EditContact() {
     return true;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    for (let i = 0; i < inputFields.length; i++) {
-      if (handleValidation()) {
-        const data = await axios.post(
-          `http://localhost:2022/address/${params.id}`,
-          Object.assign(inputFields[i], clientId),
-          {
-            headers: {
-              Authorization: window.localStorage.getItem("myapptoken"),
-            },
-          }
-        );
-
-        if (data.data.message !== "created") {
-          toast.error(data.data.message, toastOptions);
-        }
-        if (data.data.message === "created") {
-          toast.success("SuccessFully Created", toastOptions);
-        }
-      }
-    }
-  };
   return (
     <>
       <Navbar />
@@ -229,14 +221,99 @@ function EditContact() {
                   onChange={handleChange}
                 />
               </div>
-              <div className="col-4 mt-2 ms-2">
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => handleUpdate()}
-                >
-                  Update
-                </button>
-              </div>
+            </div>
+            <div className="row">
+              <h5 className="mt-3">Address</h5>
+              {credentials.address?.map((item, index) => (
+                <div className="col-4">
+                  <div class="card text-dark mt-3 mb-3">
+                    <div class="card-body" key={index}>
+                      <form>
+                        <div className="row">
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              class="form-control mt-1"
+                              placeholder="Line 1"
+                              id="line1"
+                              value={item.line1}
+                              onChange={(event) =>
+                                handleChangeOutput(index, event)
+                              }
+                            />
+                          </div>
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              placeholder="Line 2"
+                              class="form-control mt-1"
+                              id="line2"
+                              value={item.line2}
+                              onChange={(event) =>
+                                handleChangeOutput(index, event)
+                              }
+                            />
+                          </div>
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              placeholder="State"
+                              class="form-control mt-1"
+                              id="state"
+                              value={item.state}
+                              onChange={(event) =>
+                                handleChangeOutput(index, event)
+                              }
+                            />
+                          </div>
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              placeholder="City"
+                              class="form-control mt-1"
+                              id="city"
+                              value={item.city}
+                              onChange={(event) =>
+                                handleChangeOutput(index, event)
+                              }
+                            />
+                          </div>
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              placeholder="Country"
+                              class="form-control mt-1"
+                              id="country"
+                              value={item.country}
+                              onChange={(event) =>
+                                handleChangeOutput(index, event)
+                              }
+                            />
+                          </div>
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              placeholder="Pincode"
+                              class="form-control mt-1"
+                              id="pincode"
+                              value={item.pincode}
+                              onChange={(event) =>
+                                handleChangeOutput(index, event)
+                              }
+                            />
+                          </div>
+                        </div>
+                        <button
+                          className="btn btn-danger btn-sm mt-3"
+                          onClick={(e) => handleRemove(index, e)}
+                        >
+                          Delete
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
             <div className="row">
               {inputFields.length <= 0 ? (
@@ -244,7 +321,7 @@ function EditContact() {
               ) : (
                 ""
               )}
-              {inputFields.map((inputField, index) => (
+              {addAddress.map((inputField, index) => (
                 <div className="col-4">
                   <div class="card text-dark mt-3 mb-3">
                     <div class="card-header">Address</div>
@@ -330,28 +407,30 @@ function EditContact() {
                         >
                           Delete
                         </button>
-                        <button className="btn btn-primary btn-sm mt-3 ms-2">
-                          Set Default
-                        </button>
                       </form>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+
             <button
               className="btn-primary btn-sm btn mt-3"
               onClick={(e) => handleAddField(e)}
-              disabled={inputFields.length >= 3}
+              disabled={
+                addAddress.length >= 3 || credentials.address.length >= 3
+              }
             >
               Add
             </button>
-            <button
-              className="btn-primary btn-sm btn ms-2 mt-3"
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>
+            <div className="col-4 mt-2 ms-2">
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() => handleUpdate()}
+              >
+                Update
+              </button>
+            </div>
           </form>
           <ToastContainer />
         </div>

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../Component/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import { useObjectUrl } from "../../useObjectUrl";
 import axios from "axios";
 
 function CreateContact() {
+  let navigate = useNavigate();
   // const {
   //   objectURL: imagePreviewUrl,
   //   setObject: setImage,
@@ -19,7 +20,7 @@ function CreateContact() {
     draggable: true,
     theme: "dark",
   };
-
+  const [inputFields, setInputField] = useState([]);
   const [contactDetail, setContactDetail] = useState({
     name: "",
     organisation: "",
@@ -27,6 +28,16 @@ function CreateContact() {
     mobile: "",
     email: "",
     message: "",
+    address: [
+      {
+        line1: "",
+        line2: "",
+        city: "",
+        state: "",
+        country: "",
+        pincode: "",
+      },
+    ],
   });
 
   const handleChange = (e) => {
@@ -44,10 +55,49 @@ function CreateContact() {
   //   setContactDetail({ ...contactDetail, image: file });
   //   setImage(file);
   // };
+  const handleChangeInput = (index, event) => {
+    const values = [...inputFields];
+    values[index][event.target.id] = event.target.value;
+    setInputField(values);
+    contactDetail.address = JSON.stringify([...values]);
+  };
+
+  const handleAddField = (e) => {
+    e.preventDefault();
+    setInputField([
+      ...inputFields,
+      {
+        line1: "",
+        line2: "",
+        state: "",
+        city: "",
+        country: "",
+        pincode: "",
+      },
+    ]);
+  };
+
+  const handleRemoveField = (index) => {
+    const values = [...inputFields];
+    values.splice(index, 1);
+    setInputField(values);
+  };
 
   const handleValidation = () => {
-    const { name, organisation, gender, mobile, email, message } =
-      contactDetail;
+    const {
+      name,
+      organisation,
+      gender,
+      mobile,
+      email,
+      message,
+      line1,
+      line2,
+      city,
+      state,
+      country,
+      pincode,
+    } = contactDetail;
     if (name.length < 3) {
       toast.error(
         "Username should be greater than 3 characters.",
@@ -72,6 +122,24 @@ function CreateContact() {
     } else if (message === "") {
       toast.error("message is required.", toastOptions);
       return false;
+    } else if (line1 === "") {
+      toast.error("line1 is required.", toastOptions);
+      return false;
+    } else if (line2 === "") {
+      toast.error("line2 is required", toastOptions);
+      return false;
+    } else if (city === "") {
+      toast.error("city is required", toastOptions);
+      return false;
+    } else if (state === "") {
+      toast.error("state is required", toastOptions);
+      return false;
+    } else if (country === "") {
+      toast.error("country is required", toastOptions);
+      return false;
+    } else if (pincode === "") {
+      toast.error("pincode is required", toastOptions);
+      return false;
     }
     return true;
   };
@@ -80,6 +148,7 @@ function CreateContact() {
     e.preventDefault();
 
     if (handleValidation()) {
+      console.log(contactDetail);
       const data = await axios.post(
         "http://localhost:2022/newContact",
         contactDetail,
@@ -94,6 +163,7 @@ function CreateContact() {
       }
       if (data.data.message === "Contact Created") {
         toast.success("SuccessFully Created", toastOptions);
+        navigate("/contact");
       }
     }
   };
@@ -177,6 +247,112 @@ function CreateContact() {
                 />
               </div> */}
             </div>
+
+            <div className="row">
+              {inputFields.length <= 0 ? (
+                <h3 className="mt-3">Add Address</h3>
+              ) : (
+                ""
+              )}
+              {inputFields.map((inputField, index) => (
+                <div className="col-4">
+                  <div class="card text-dark mt-3 mb-3">
+                    <div class="card-header">Address</div>
+                    <div class="card-body" key={index}>
+                      <form>
+                        <div className="row">
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              class="form-control mt-1"
+                              placeholder="Line 1"
+                              id="line1"
+                              value={inputField.line1}
+                              onChange={(event) =>
+                                handleChangeInput(index, event)
+                              }
+                            />
+                          </div>
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              placeholder="Line 2"
+                              class="form-control mt-1"
+                              id="line2"
+                              value={inputField.line2}
+                              onChange={(event) =>
+                                handleChangeInput(index, event)
+                              }
+                            />
+                          </div>
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              placeholder="State"
+                              class="form-control mt-1"
+                              id="state"
+                              value={inputField.state}
+                              onChange={(event) =>
+                                handleChangeInput(index, event)
+                              }
+                            />
+                          </div>
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              placeholder="City"
+                              class="form-control mt-1"
+                              id="city"
+                              value={inputField.city}
+                              onChange={(event) =>
+                                handleChangeInput(index, event)
+                              }
+                            />
+                          </div>
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              placeholder="Country"
+                              class="form-control mt-1"
+                              id="country"
+                              value={inputField.country}
+                              onChange={(event) =>
+                                handleChangeInput(index, event)
+                              }
+                            />
+                          </div>
+                          <div className="col-6">
+                            <input
+                              type="text"
+                              placeholder="Pincode"
+                              class="form-control mt-1"
+                              id="pincode"
+                              value={inputField.pincode}
+                              onChange={(event) =>
+                                handleChangeInput(index, event)
+                              }
+                            />
+                          </div>
+                        </div>
+                        <button
+                          className="btn btn-danger btn-sm mt-3"
+                          onClick={() => handleRemoveField()}
+                        >
+                          Delete
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button
+              className="btn-primary btn-sm btn mt-3"
+              onClick={(e) => handleAddField(e)}
+              disabled={inputFields.length >= 3}
+            >
+              Add
+            </button>
             <div className="col-4">
               <Link to={"/contact"}>
                 <button className="btn btn-danger btn-sm me-2 mt-4">

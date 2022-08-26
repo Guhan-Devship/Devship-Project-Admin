@@ -48,34 +48,24 @@ function ViewContact() {
                 <p>Message</p>
               </div>
               <div className="col-6">
-                {contact.map((items) => {
-                  return (
-                    <>
-                      <p>: {items.name}</p>
-                      <p>: {items.organisation}</p>
-                      <p>: {items.gender}</p>
-                      <p>: {items.mobile}</p>
-                      <p>: {items.email}</p>
-                      <p>: {items.message}</p>
-                    </>
-                  );
-                })}
+                <p>: {contact.name}</p>
+                <p>: {contact.organisation}</p>
+                <p>: {contact.gender}</p>
+                <p>: {contact.mobile}</p>
+                <p>: {contact.email}</p>
+                <p>: {contact.message}</p>
               </div>
             </div>
           </div>
           <div className="col-6 mt-5 border">
             <h3>Address</h3>
             <div className="col-4">
-              <h6>Address 1</h6>
-              {contact.map((items) => {
+              {contact.address?.map((item) => {
                 return (
                   <>
                     <p>
-                      {" "}
-                      {items.Address.line1},{items.Address.line2},
-                      {items.Address.city},{items.Address.state},
-                      {items.Address.country}
-                      {items.Address.pincode}
+                      {item.line1},{item.line2},{item.city},{item.state},
+                      {item.country},{item.pincode}
                     </p>
                   </>
                 );

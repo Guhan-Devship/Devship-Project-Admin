@@ -83,12 +83,20 @@ function Order() {
                 {order.map((data) => {
                   return (
                     <tr>
-                      <td>{data.name}</td>
-                      <td>
-                        {data.line1},{data.line2},{data.state},{data.city},
-                        {data.country}
-                      </td>
-                      <td>{data.pincode}</td>
+                      {data.Address.map((item) => {
+                        if (item.billingAddress === true) {
+                          return (
+                            <>
+                              <td>{item.name}</td>
+                              <td>
+                                {item.line1},{item.line2},{item.state},
+                                {item.city},{item.country}
+                              </td>
+                              <td>{item.pincode}</td>
+                            </>
+                          );
+                        }
+                      })}
                       <td>{data.title}</td>
                       <td>{data.quantity}</td>
                       <td>&#x20b9;{data.offerPrice}</td>
