@@ -84,20 +84,8 @@ function CreateContact() {
   };
 
   const handleValidation = () => {
-    const {
-      name,
-      organisation,
-      gender,
-      mobile,
-      email,
-      message,
-      line1,
-      line2,
-      city,
-      state,
-      country,
-      pincode,
-    } = contactDetail;
+    const { name, organisation, gender, mobile, email, message } =
+      contactDetail;
     if (name.length < 3) {
       toast.error(
         "Username should be greater than 3 characters.",
@@ -122,7 +110,13 @@ function CreateContact() {
     } else if (message === "") {
       toast.error("message is required.", toastOptions);
       return false;
-    } else if (line1 === "") {
+    }
+    return true;
+  };
+
+  const handleAddressValidation = () => {
+    const [{ line1, line2, city, state, country, pincode }] = inputFields;
+    if (line1 === "") {
       toast.error("line1 is required.", toastOptions);
       return false;
     } else if (line2 === "") {
@@ -148,22 +142,24 @@ function CreateContact() {
     e.preventDefault();
 
     if (handleValidation()) {
-      console.log(contactDetail);
-      const data = await axios.post(
-        "http://localhost:2022/newContact",
-        contactDetail,
-        {
-          headers: {
-            Authorization: window.localStorage.getItem("myapptoken"),
-          },
+      if (handleAddressValidation()) {
+        console.log(contactDetail);
+        const data = await axios.post(
+          "http://localhost:2022/newContact",
+          contactDetail,
+          {
+            headers: {
+              Authorization: window.localStorage.getItem("myapptoken"),
+            },
+          }
+        );
+        if (data.data.message !== "Contact Created") {
+          toast.error(data.data.message, toastOptions);
         }
-      );
-      if (data.data.message !== "Contact Created") {
-        toast.error(data.data.message, toastOptions);
-      }
-      if (data.data.message === "Contact Created") {
-        toast.success("SuccessFully Created", toastOptions);
-        navigate("/contact");
+        if (data.data.message === "Contact Created") {
+          toast.success("SuccessFully Created", toastOptions);
+          navigate("/contact");
+        }
       }
     }
   };

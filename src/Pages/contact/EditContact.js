@@ -10,6 +10,7 @@ function EditContact() {
       navigate("/");
     }
   }
+
   let params = useParams();
   const [clientId, setClientId] = useState({ createdby: params.id });
   const navigate = useNavigate();
@@ -20,8 +21,9 @@ function EditContact() {
     draggable: true,
     theme: "dark",
   };
-  const [inputFields, setInputField] = useState([]);
+
   const [addAddress, setAddAddress] = useState([]);
+  const [inputFields, setinputFields] = useState([]);
   const [credentials, setCredentials] = useState({
     name: "",
     organisation: "",
@@ -29,8 +31,18 @@ function EditContact() {
     mobile: "",
     email: "",
     message: "",
-    address: [inputFields],
+    address: [
+      {
+        line1: "",
+        line2: "",
+        city: "",
+        state: "",
+        country: "",
+        pincode: "",
+      },
+    ],
   });
+  console.log(addAddress);
   const handleChange = (e) => {
     const id = e.target.id;
     const value = e.target.value;
@@ -51,6 +63,7 @@ function EditContact() {
         }
       );
       setCredentials(editdata.data);
+      console.log(editdata.data);
     } catch (error) {
       console.log(error);
     }
@@ -64,8 +77,32 @@ function EditContact() {
     fetch();
   }, []);
 
-  const handleUpdate = async () => {
-    if (handleValidation()) {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    const checkIfEmptyValuesArray = (e, i) => {
+      return (
+        e.line1 === "" ||
+        e.line2 === "" ||
+        e.city === "" ||
+        e.state === "" ||
+        e.country === "" ||
+        e.pincode === ""
+      );
+    };
+
+    if (addAddress.some(checkIfEmptyValuesArray)) {
+      return toast.error("address Field Required", toastOptions);
+    } else {
+      addAddress.map((item) => {
+        credentials.address.push(item);
+      });
+    }
+
+    if (credentials.address.some(checkIfEmptyValuesArray)) {
+      return toast.error("address Field Required", toastOptions);
+    } else {
+      credentials.address = JSON.stringify(credentials.address);
       const updateData = await axios
         .put(`http://localhost:2022/updateContact/${params.id}`, credentials, {
           headers: {
@@ -74,7 +111,7 @@ function EditContact() {
         })
         .then((res) => {
           toast.success("Updated", toastOptions);
-          // navigate("/contact", { replace: true });
+          window.location.reload();
         })
         .catch((err) => {
           console.log(err);
@@ -86,17 +123,13 @@ function EditContact() {
   const handleChangeOutput = (index, event) => {
     const values = [...credentials.address];
     values[index][event.target.id] = event.target.value;
-    console.log(values);
-    setInputField(values);
-    // credentials.address = JSON.stringify([inputFields]);
+    setCredentials({ ...credentials, address: values });
   };
 
   const handleChangeInput = (index, event) => {
     const values = [...addAddress];
     values[index][event.target.id] = event.target.value;
     setAddAddress(values);
-    console.log(values);
-    // cre.address = JSON.stringify([...values]);
   };
 
   const handleAddField = (e) => {
@@ -124,11 +157,15 @@ function EditContact() {
     e.preventDefault();
     const values = [...credentials.address];
     values.splice(index, 1);
-    console.log(values);
+    setCredentials({
+      ...credentials,
+      address: values,
+    });
   };
 
   const handleValidation = () => {
-    const [{ line1, line2, city, state, country, pincode }] = inputFields;
+    const [{ line1, line2, city, state, country, pincode }] =
+      credentials.address;
     if (line1 === "") {
       toast.error("line1 is required.", toastOptions);
       return false;
@@ -151,6 +188,51 @@ function EditContact() {
     return true;
   };
 
+  const handleValidationAddress = () => {
+    const [{ line1, line2, city, state, country, pincode }] = addAddress;
+    if (line1 === "") {
+      toast.error("line1 is required.", toastOptions);
+      return false;
+    } else if (line2 === "") {
+      toast.error("line2 is required", toastOptions);
+      return false;
+    } else if (city === "") {
+      toast.error("city is required", toastOptions);
+      return false;
+    } else if (state === "") {
+      toast.error("state is required", toastOptions);
+      return false;
+    } else if (country === "") {
+      toast.error("country is required", toastOptions);
+      return false;
+    } else if (pincode === "") {
+      toast.error("pincode is required", toastOptions);
+      return false;
+    }
+    return true;
+  };
+
+  let handleDelete = async (id) => {
+    try {
+      let ask = window.confirm(
+        "Are you sure, do you want to delete this User?"
+      );
+      if (ask) {
+        await axios.delete(
+          `http://localhost:2022/deleteContactAddress/${id}/${params.id}`,
+          {
+            headers: {
+              Authorization: window.localStorage.getItem("myapptoken"),
+            },
+          }
+        );
+        toast.success("Removed", toastOptions);
+        fetchData();
+      }
+    } catch (error) {
+      alert("Something went wrong");
+    }
+  };
   return (
     <>
       <Navbar />
@@ -305,7 +387,7 @@ function EditContact() {
                         </div>
                         <button
                           className="btn btn-danger btn-sm mt-3"
-                          onClick={(e) => handleRemove(index, e)}
+                          onClick={() => handleDelete(item._id)}
                         >
                           Delete
                         </button>
@@ -316,11 +398,6 @@ function EditContact() {
               ))}
             </div>
             <div className="row">
-              {inputFields.length <= 0 ? (
-                <h3 className="mt-3">Add Address</h3>
-              ) : (
-                ""
-              )}
               {addAddress.map((inputField, index) => (
                 <div className="col-4">
                   <div class="card text-dark mt-3 mb-3">
@@ -426,7 +503,7 @@ function EditContact() {
             <div className="col-4 mt-2 ms-2">
               <button
                 className="btn btn-primary btn-sm"
-                onClick={() => handleUpdate()}
+                onClick={(e) => handleUpdate(e)}
               >
                 Update
               </button>
