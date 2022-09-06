@@ -101,7 +101,7 @@ function EditContact() {
 
     if (credentials.address.some(checkIfEmptyValuesArray)) {
       return toast.error("address Field Required", toastOptions);
-    } else {
+    } else if (handleValidation()) {
       credentials.address = JSON.stringify(credentials.address);
       const updateData = await axios
         .put(`http://localhost:2022/updateContact/${params.id}`, credentials, {
@@ -164,49 +164,24 @@ function EditContact() {
   };
 
   const handleValidation = () => {
-    const [{ line1, line2, city, state, country, pincode }] =
-      credentials.address;
-    if (line1 === "") {
-      toast.error("line1 is required.", toastOptions);
+    const { name, organisation, gender, mobile, email, message } = credentials;
+    if (name === "") {
+      toast.error("name is required.", toastOptions);
       return false;
-    } else if (line2 === "") {
-      toast.error("line2 is required", toastOptions);
+    } else if (organisation === "") {
+      toast.error("organisation is required", toastOptions);
       return false;
-    } else if (city === "") {
-      toast.error("city is required", toastOptions);
+    } else if (gender === "") {
+      toast.error("gender is required", toastOptions);
       return false;
-    } else if (state === "") {
-      toast.error("state is required", toastOptions);
+    } else if (mobile === "") {
+      toast.error("mobile is required", toastOptions);
       return false;
-    } else if (country === "") {
-      toast.error("country is required", toastOptions);
+    } else if (email === "") {
+      toast.error("email is required", toastOptions);
       return false;
-    } else if (pincode === "") {
-      toast.error("pincode is required", toastOptions);
-      return false;
-    }
-    return true;
-  };
-
-  const handleValidationAddress = () => {
-    const [{ line1, line2, city, state, country, pincode }] = addAddress;
-    if (line1 === "") {
-      toast.error("line1 is required.", toastOptions);
-      return false;
-    } else if (line2 === "") {
-      toast.error("line2 is required", toastOptions);
-      return false;
-    } else if (city === "") {
-      toast.error("city is required", toastOptions);
-      return false;
-    } else if (state === "") {
-      toast.error("state is required", toastOptions);
-      return false;
-    } else if (country === "") {
-      toast.error("country is required", toastOptions);
-      return false;
-    } else if (pincode === "") {
-      toast.error("pincode is required", toastOptions);
+    } else if (message === "") {
+      toast.error("message is required", toastOptions);
       return false;
     }
     return true;
@@ -215,7 +190,7 @@ function EditContact() {
   let handleDelete = async (id) => {
     try {
       let ask = window.confirm(
-        "Are you sure, do you want to delete this User?"
+        "Are you sure, do you want to delete this Contact?"
       );
       if (ask) {
         await axios.delete(
