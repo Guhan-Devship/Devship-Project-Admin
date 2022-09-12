@@ -1,9 +1,12 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { UserContext } from "../../App";
 import Navbar from "../../Component/Navbar";
 
 function ViewUser() {
+  const users = useContext(UserContext);
+  console.log(users);
   function fetch() {
     if (!localStorage.getItem("myapptoken")) {
       navigate("/");
@@ -52,6 +55,7 @@ function ViewUser() {
                     className="btn btn-primary"
                   />
                 </div>
+                <p className="mt-3">Created by {users}</p>
               </div>
               <div className="col-6"></div>
             </div>

@@ -20,6 +20,11 @@ import Contact from "./Pages/contact/Contact";
 import CreateContact from "./Pages/contact/CreateContact";
 import ViewContact from "./Pages/contact/ViewConatct";
 import EditContact from "./Pages/contact/EditContact";
+import { createContext } from "react";
+import UseRef from "./Prcatice/UseRef";
+import UseCallBack from "./Prcatice/UseCallBack";
+import Form from "./Prcatice/Form";
+export const UserContext = createContext();
 
 function App() {
   return (
@@ -43,6 +48,9 @@ function App() {
         <Route path="/create-contact" element={<CreateContact />} />
         <Route path="/view-contact/:id" element={<ViewContact />} />
         <Route path="/edit-contact/:id" element={<EditContact />} />
+        <Route path="/ref" element={<UseRef />} />
+        <Route path="/call" element={<UseCallBack />} />
+        <Route path="/form" element={<Form />} />
       </Routes>
     </BrowserRouter>
   );
