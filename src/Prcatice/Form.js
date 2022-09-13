@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import useCustomForm from "../Component/UseCustomForm";
 import { ToastContainer, toast } from "react-toastify";
+import hidepassword from "../icons/hidepassword.png";
+import showpassword from "../icons/showPassword.png";
 
 const initialValues = {
   first_name: "",
@@ -9,6 +11,11 @@ const initialValues = {
   password: "",
   confirmPassword: "",
   agree_terms: false,
+  phone: {
+    number: "",
+    code: "",
+    dialcountry: "",
+  },
 };
 
 function Form() {
@@ -31,8 +38,15 @@ function Form() {
   });
   const [isRevealPwd, setIsRevealPwd] = useState(false);
   const [isRevealConfirmPwd, setIsRevealConfirmPwd] = useState(false);
-  const { first_name, surname, email, password, confirmPassword, agree_terms } =
-    inputs;
+  const {
+    first_name,
+    surname,
+    email,
+    password,
+    confirmPassword,
+    agree_terms,
+    phone,
+  } = inputs;
 
   const onSubmit = () => {
     if (first_name === "") {
@@ -60,7 +74,7 @@ function Form() {
       });
     }
     if (confirmPassword === "") {
-      return toast.error("Password required.", {
+      return toast.error("Confirm Password required.", {
         id: "confirmPassword",
       });
     }
@@ -69,9 +83,9 @@ function Form() {
         id: "fullName",
       });
     }
-    if (agree_terms === "") {
-      return toast.error("Password required.", {
-        id: "confirmPassword",
+    if (agree_terms !== true) {
+      return toast.error("Agree Terms", {
+        id: "agree_terms",
       });
     }
     console.log(inputs);
@@ -123,6 +137,19 @@ function Form() {
               <label htmlFor="newEmail">Email</label>
             </div>
           </div>
+          <div className="col-sm-12 col-lg-6">
+            <div className="form-box">
+              <input
+                type="tel"
+                className="form-control"
+                name="number"
+                id="newPhone"
+                value={phone.number}
+                onChange={(e) => handleObjectChange(e, phone)}
+              />
+              <label htmlFor="newPhone">Mobile</label>
+            </div>
+          </div>
         </div>
         <div>
           <div className="col-sm-12 col-lg-6">
@@ -136,6 +163,13 @@ function Form() {
                 onChange={handleChange}
               />
               <label htmlFor="newPassword">Password</label>
+              <img
+                src={isRevealPwd ? hidepassword : showpassword}
+                className="showpassword"
+                alt="eye-icon"
+                id="eye-icon"
+                onClick={() => setIsRevealPwd((prevState) => !prevState)}
+              />
             </div>
           </div>
           <div className="col-sm-12 col-lg-6">
@@ -149,6 +183,13 @@ function Form() {
                 onChange={handleChange}
               />
               <label htmlFor="newConfirmPassword">Confirm Password</label>
+              <img
+                src={isRevealConfirmPwd ? hidepassword : showpassword}
+                className="showpassword"
+                alt="eye-icon"
+                id="eye-icon"
+                onClick={() => setIsRevealConfirmPwd((prevState) => !prevState)}
+              />
             </div>
           </div>
         </div>
