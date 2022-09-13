@@ -139,7 +139,7 @@ function Form() {
               <Select
                 name="gender"
                 id="gender"
-                onChange={handleSelectChange}
+                onChange={(e) => handleSelectChange(e, gender)}
                 options={options}
               />
               <label htmlFor="gender">Gender</label>
