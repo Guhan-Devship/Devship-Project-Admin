@@ -3,10 +3,12 @@ import useCustomForm from "../Component/UseCustomForm";
 import { ToastContainer, toast } from "react-toastify";
 import hidepassword from "../icons/hidepassword.png";
 import showpassword from "../icons/showPassword.png";
+import Select from "react-select";
 
 const initialValues = {
   first_name: "",
   surname: "",
+  gender: "",
   email: "",
   password: "",
   confirmPassword: "",
@@ -18,6 +20,11 @@ const initialValues = {
   },
 };
 
+const options = [
+  { value: "male", label: "Male" },
+  { value: "female", label: "Female" },
+  { value: "transgender", label: "Transgender" },
+];
 function Form() {
   const validateEmail = (email) => {
     return String(email)
@@ -32,6 +39,7 @@ function Form() {
     handleChange,
     handleObjectChange,
     handleSubmit,
+    handleSelectChange,
   } = useCustomForm({
     initialValues,
     onSubmit: () => onSubmit(),
@@ -41,6 +49,7 @@ function Form() {
   const {
     first_name,
     surname,
+    gender,
     email,
     password,
     confirmPassword,
@@ -88,6 +97,7 @@ function Form() {
         id: "agree_terms",
       });
     }
+
     console.log(inputs);
   };
   return (
@@ -124,6 +134,17 @@ function Form() {
           </div>
         </div>
         <div>
+          <div className="col-sm-12 col-lg-6">
+            <div className="form-box">
+              <Select
+                name="gender"
+                id="gender"
+                onChange={handleSelectChange}
+                options={options}
+              />
+              <label htmlFor="gender">Gender</label>
+            </div>
+          </div>
           <div className="col-sm-12 col-lg-6">
             <div className="form-box">
               <input

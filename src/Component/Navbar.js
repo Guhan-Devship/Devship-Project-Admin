@@ -8,6 +8,7 @@ function Navbar() {
   let handleLogout = () => {
     window.localStorage.removeItem("myapptoken", "name");
     navigate("/");
+    window.location.reload();
   };
   let userId = window.localStorage.getItem("id");
   async function fetchData() {
@@ -26,40 +27,7 @@ function Navbar() {
   let mobile = window.localStorage.getItem("mobile");
   return (
     <>
-      <nav id="navbar-example2" class="navbar navbar-light bg-dark">
-        <Link to={"/home"} class="navbar-brand text-white">
-          Admin Page
-        </Link>
-        <ul class="nav nav-pills">
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              data-toggle="dropdown"
-              href="#"
-              role="button"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <i class="fa fa-user" aria-hidden="true"></i>
-              Info
-            </a>
-            <div class="dropdown-menu">
-              <Link to={"/users"} class="dropdown-item">
-                User
-              </Link>
-              <Link to={"/product"} class="dropdown-item">
-                Product
-              </Link>
-              <Link to={"/order"} class="dropdown-item">
-                Orders
-              </Link>
-              <Link to={"/contact"} class="dropdown-item">
-                Contact
-              </Link>
-              <div role="separator" class="dropdown-divider"></div>
-            </div>
-          </li>
-        </ul>
+      <nav id="navbar-example2" class="navbar navbar-light topbar">
         <ul class="nav nav-pills">
           <li class="nav-item dropdown">
             <a

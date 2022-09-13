@@ -89,7 +89,6 @@ function CreateUser() {
   };
   return (
     <>
-      <Navbar />
       <div className="container mx-auto mt-5">
         <div class="card-header py-3 mb-2 d-flex justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Users Details</h6>

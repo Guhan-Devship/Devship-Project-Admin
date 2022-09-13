@@ -31,7 +31,6 @@ function ViewUser() {
   }, []);
   return (
     <>
-      <Navbar />
       <div class="card w-50">
         <div class="card-body">
           <div className="container">

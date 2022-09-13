@@ -33,7 +33,6 @@ function ViewContact() {
 
   return (
     <>
-      <Navbar />
       <div className="container">
         <div className="row">
           <div className="col-6 border mt-5">

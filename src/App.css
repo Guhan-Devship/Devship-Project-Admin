@@ -48,6 +48,9 @@ body {
 .phone-container p span {
   font-weight: 500;
 }
+.navbar{
+  justify-content: flex-end!important;
+}
 
 .nav-wrap{
   display: flex;
@@ -88,4 +91,84 @@ body {
   width: 30px;
   height: 30px;
   margin-left: 10px;
+}
+.card-body{
+  height: 400px;
+  width: auto;
+  overflow-y: scroll;
+}
+.topbar{
+  background-color: #0081cc;
+  color: #f2f0e4;
+  text-decoration: none;
+  list-style: none;
+}
+.nav-link{
+  list-style: none;
+  color: #f2f0e4!important;
+}
+/* ********************************************* */
+#wrapper {
+  display: flex;
+}
+.page-container{
+  width: 100%!important;
+}
+
+#wrapper #content-wrapper {
+  background-color: #f8f9fc;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+#wrapper #content-wrapper #content {
+  flex: 1 0 auto;
+}
+/* ************************************* */
+.accordion {
+  overflow-anchor: none;
+}
+
+.accordion > .card {
+  overflow: hidden;
+}
+
+.accordion > .card:not(:last-of-type) {
+  border-bottom: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.accordion > .card:not(:first-of-type) {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.accordion > .card > .card-header {
+  border-radius: 0;
+  margin-bottom: -1px;
+}
+.sidebar{
+  width: 250px;
+  text-align: center;
+  background-color: #0081cc;
+  color: #f2f0e4;
+  height: 650px;
+}
+.sidebar-brand-text{
+  text-decoration:none;
+  color: #f2f0e4;
+  list-style-type: none;
+}
+.admin-logo{
+  width: 30px;
+  height: 30px;
+}
+.sidebar-divider{
+  margin: 1px;
+  color: black;
+}
+.sidebar-link:hover{
+  transform: scale(1.09);
+  background-color: #3287b7;
 }

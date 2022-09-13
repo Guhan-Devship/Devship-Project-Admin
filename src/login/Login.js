@@ -34,6 +34,7 @@ function Login() {
         window.localStorage.setItem("name", data.data.response.name);
         window.localStorage.setItem("id", data.data.response.id);
         navigate("/home");
+        window.location.reload();
       }
     }
   };

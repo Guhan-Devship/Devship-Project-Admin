@@ -57,7 +57,6 @@ function Profile() {
 
   return (
     <>
-      <Navbar />
       <div className="container">
         <div className="row mt-5">
           <div class="row gutters">
