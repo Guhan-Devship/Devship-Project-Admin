@@ -139,6 +139,7 @@ function Form() {
               <Select
                 name="gender"
                 id="gender"
+                defaultValue={gender}
                 onChange={(e) => handleSelectChange(e, gender)}
                 options={options}
               />

@@ -26,6 +26,8 @@ import UseCallBack from "./Prcatice/UseCallBack";
 import Form from "./Prcatice/Form";
 import Sidebar from "./Component/Sidebar";
 import Navbar from "./Component/Navbar";
+import UseReducer from "./Prcatice/UseReducer";
+import UseMemo from "./Prcatice/UseMemo";
 export const UserContext = createContext();
 
 function App() {
@@ -60,6 +62,8 @@ function App() {
                   <Route path="/ref" element={<UseRef />} />
                   <Route path="/call" element={<UseCallBack />} />
                   <Route path="/form" element={<Form />} />
+                  <Route path="/reducer" element={<UseReducer />} />
+                  <Route path="/memo" element={<UseMemo />} />
                 </Routes>
               </div>
             </div>
