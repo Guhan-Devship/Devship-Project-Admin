@@ -140,7 +140,7 @@ function Form() {
                 name="gender"
                 id="gender"
                 defaultValue={gender}
-                onChange={(e) => handleSelectChange(e, gender)}
+                onChange={(e) => handleSelectChange(e, "gender")}
                 options={options}
               />
               <label htmlFor="gender">Gender</label>

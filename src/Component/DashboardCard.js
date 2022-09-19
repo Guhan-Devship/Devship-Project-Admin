@@ -17,7 +17,7 @@ function DashboardCard(props) {
             : null
         }
       >
-        <div class="card-body">{props.card.title}</div>
+        <div class="card-style">{props.card.title}</div>
 
         <div class="card-footer d-flex align-items-center justify-content-between">
           <Link

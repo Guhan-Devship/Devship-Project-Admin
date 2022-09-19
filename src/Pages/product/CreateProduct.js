@@ -1,8 +1,10 @@
 import axios from "axios";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Navbar from "../../Component/Navbar";
+import { useMultiObjectUrl } from "../../useMultiObjectUrl";
 import { useObjectUrl } from "../../useObjectUrl";
 
 function CreateProduct() {
@@ -33,7 +35,6 @@ function CreateProduct() {
     setObject: setImage,
     object: image,
   } = useObjectUrl();
-
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
@@ -41,11 +42,13 @@ function CreateProduct() {
     e.preventDefault();
     if (handleValidation()) {
       const { title, image } = credentials;
+      console.log(credentials);
       const formData = new FormData();
 
       Object.entries(credentials).forEach(([key, value]) =>
         formData.append(key, value)
       );
+
       const data = await axios.post(
         "http://localhost:2022/newCategory",
         formData,
@@ -78,12 +81,10 @@ function CreateProduct() {
 
   const handleFileChange = (e) => {
     const [file] = e.target.files;
-
     if (!file || !file.type.startsWith("image/")) {
       alert("Invalid file format");
       return;
     }
-
     setCredentials({ ...credentials, image: file });
     setImage(file);
   };
@@ -94,7 +95,7 @@ function CreateProduct() {
           <h6 class="m-0 font-weight-bold text-primary">Product Details</h6>
         </div>
         <div className="card-body">
-          <form>
+          <form enctype="multipart/form-data">
             <div className="row user-row">
               <div className="form-group col-sm-12 col-md-4 col-lg-6 col-xl-6 col-xxl-6 mb-5">
                 <input
@@ -119,6 +120,7 @@ function CreateProduct() {
                   name="myImage"
                   accept="image/*"
                   onChange={handleFileChange}
+                  multiple="multiple"
                 />
               </div>
               <div className="col-4 mt-5 ms-2">

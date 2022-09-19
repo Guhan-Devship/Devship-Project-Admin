@@ -124,9 +124,6 @@ function ListProduct() {
             </table>
           </div>
         </div>
-        <Link to={"/product"}>
-          <button className="btn btn-primary btn-sm m-4">Back</button>
-        </Link>
       </div>
       <ToastContainer />
     </>

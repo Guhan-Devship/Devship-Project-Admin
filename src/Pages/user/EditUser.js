@@ -74,7 +74,7 @@ function EditUser() {
       .catch((err) => {
         console.log(err);
       });
-    navigate("/users", { replace: true });
+    navigate("/home/users", { replace: true });
   };
   return (
     <>
@@ -130,7 +130,7 @@ function EditUser() {
               />
             </div>
             <div className="col-4 mt-5 ms-2">
-              <Link to={"/users"}>
+              <Link to={"/home/users"}>
                 <button className="btn btn-danger btn-sm me-2">cancel</button>
               </Link>
               <button

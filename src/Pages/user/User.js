@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Navbar from "../../Component/Navbar";
 
@@ -65,7 +65,7 @@ function User() {
       <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Users Details</h6>
-          <Link to={"/create-user"}>
+          <Link to={"createnew"}>
             <button className="btn btn-primary btn-sm">Create User</button>
           </Link>
         </div>
@@ -102,12 +102,12 @@ function User() {
                         >
                           Remove
                         </button>
-                        <Link to={`/edit-user/${user._id}`}>
+                        <Link to={`edit-user/${user._id}`}>
                           <button className="btn btn-outline-warning btn-sm ms-2">
                             Edit
                           </button>
                         </Link>
-                        <Link to={`/view-user/${user._id}`}>
+                        <Link to={`view-user/${user._id}`}>
                           <button className="btn btn-outline-primary btn-sm ms-2">
                             View
                           </button>
@@ -120,11 +120,9 @@ function User() {
             </table>
           </div>
         </div>
-        <Link to={"/home"}>
-          <button className="btn btn-primary btn-sm m-4">Back</button>
-        </Link>
       </div>
       <ToastContainer />
+      <Outlet />
     </>
   );
 }

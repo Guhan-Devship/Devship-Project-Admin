@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Navbar from "../../Component/Navbar";
 
-function CreateUser() {
+function UserCreate() {
   function fetchData() {
     if (!localStorage.getItem("myapptoken")) {
       navigate("/");
@@ -59,7 +59,7 @@ function CreateUser() {
       }
       if (data.data.message === "User Created") {
         toast.success("SuccessFully Created", toastOptions);
-        navigate("/users");
+        navigate("/home/users");
       }
     }
   };
@@ -143,7 +143,7 @@ function CreateUser() {
               </div>
             </div>
             <div className="col-4 mt-5 ms-2">
-              <Link to={"/users"}>
+              <Link to={"/home/users"}>
                 <button className="btn btn-danger btn-sm me-2">cancel</button>
               </Link>
               <button className="btn btn-primary btn-sm" onClick={handleClick}>
@@ -158,4 +158,4 @@ function CreateUser() {
   );
 }
 
-export default CreateUser;
+export default UserCreate;

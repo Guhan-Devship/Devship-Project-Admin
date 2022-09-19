@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./login/Login";
 import Home from "./home/Home";
 import User from "./Pages/user/User";
-import CreateUser from "./Pages/user/CreateUser";
 import EditUser from "./Pages/user/EditUser";
 import Product from "./Pages/product/Product";
 import CreateProduct from "./Pages/product/CreateProduct";
@@ -28,6 +27,8 @@ import Sidebar from "./Component/Sidebar";
 import Navbar from "./Component/Navbar";
 import UseReducer from "./Prcatice/UseReducer";
 import UseMemo from "./Prcatice/UseMemo";
+import MultiImageUpload from "./Prcatice/MultiImageUpload";
+import UserCreate from "./Pages/user/UserCreate";
 export const UserContext = createContext();
 
 function App() {
@@ -42,20 +43,28 @@ function App() {
               <Navbar />
               <div class="container-fluid">
                 <Routes>
-                  <Route path="/home" element={<Home />} />
+                  <Route path="/home" element={<Home />}>
+                    <Route path="users" element={<User />} />
+                    <Route path="product" element={<Product />} />
+                    <Route path="order" element={<Order />} />
+                    <Route path="contact" element={<Contact />} />
+                    <Route path="upload" element={<MultiImageUpload />} />
+                  </Route>
                   <Route path="/profile" element={<Profile />} />
-                  <Route path="/users" element={<User />} />
-                  <Route path="/create-user" element={<CreateUser />} />
-                  <Route path="/edit-user/:id" element={<EditUser />} />
-                  <Route path="/view-user/:id" element={<ViewUser />} />
-                  <Route path="/product" element={<Product />} />
+                  <Route path="home/users/createnew" element={<UserCreate />} />
+                  <Route
+                    path="home/users/edit-user/:id"
+                    element={<EditUser />}
+                  />
+                  <Route
+                    path="home/users/view-user/:id"
+                    element={<ViewUser />}
+                  />
                   <Route path="/create-category" element={<CreateProduct />} />
                   <Route path="/view/:id" element={<ListProduct />} />
                   <Route path="/create-product" element={<CreateNew />} />
                   <Route path="/viewList/:id" element={<ViewProduct />} />
                   <Route path="/editList/:id" element={<EditProduct />} />
-                  <Route path="/order" element={<Order />} />
-                  <Route path="/contact" element={<Contact />} />
                   <Route path="/create-contact" element={<CreateContact />} />
                   <Route path="/view-contact/:id" element={<ViewContact />} />
                   <Route path="/edit-contact/:id" element={<EditContact />} />

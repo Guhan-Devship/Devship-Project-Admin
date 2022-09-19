@@ -30,7 +30,7 @@ function Sidebar() {
 
       {/* <!-- Nav Item - Dashboard --> */}
       <li class="nav-item">
-        <Link class="nav-link sidebar-link m-2" to={"/users"}>
+        <Link class="nav-link sidebar-link m-2" to={"home/users"}>
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>User</span>
         </Link>
@@ -40,7 +40,7 @@ function Sidebar() {
 
       {/* <!-- Nav Item - Charts --> */}
       <li class="nav-item">
-        <Link class="nav-link sidebar-link m-2" to={"/product"}>
+        <Link class="nav-link sidebar-link m-2" to={"home/product"}>
           <i class="fas fa-fw fa-table"></i>
           <span>Product</span>
         </Link>
@@ -48,7 +48,7 @@ function Sidebar() {
 
       {/* <!-- Nav Item - Tables --> */}
       <li class="nav-item">
-        <Link class="nav-link sidebar-link m-2" to={"/contact"}>
+        <Link class="nav-link sidebar-link m-2" to={"home/contact"}>
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Contact</span>
         </Link>
@@ -56,9 +56,15 @@ function Sidebar() {
 
       {/* <!-- Divider --> */}
       <li class="nav-item">
-        <Link class="nav-link sidebar-link m-2" to={"/order"}>
+        <Link class="nav-link sidebar-link m-2" to={"home/order"}>
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Order</span>
+        </Link>
+      </li>
+      <li class="nav-item">
+        <Link class="nav-link sidebar-link m-2" to={"home/upload"}>
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Uploads</span>
         </Link>
       </li>
     </ul>

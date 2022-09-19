@@ -50,7 +50,7 @@ function ViewUser() {
                   <input
                     type={"submit"}
                     value="Close"
-                    onClick={() => navigate("/users", { replace: true })}
+                    onClick={() => navigate("/home/users", { replace: true })}
                     className="btn btn-primary"
                   />
                 </div>

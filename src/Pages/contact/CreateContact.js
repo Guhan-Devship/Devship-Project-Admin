@@ -253,7 +253,7 @@ function CreateContact() {
                 <div className="col-4">
                   <div class="card text-dark mt-3 mb-3">
                     <div class="card-header">Address</div>
-                    <div class="card-body" key={index}>
+                    <div class="card-style" key={index}>
                       <form>
                         <div className="row">
                           <div className="col-6">

@@ -115,9 +115,6 @@ function Order() {
             </table>
           </div>
         </div>
-        <Link to={"/home"}>
-          <button className="btn btn-primary btn-sm m-4">Back</button>
-        </Link>
         <ToastContainer />
       </div>
     </>

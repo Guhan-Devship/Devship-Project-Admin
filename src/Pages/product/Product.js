@@ -78,6 +78,7 @@ function Product() {
               <thead>
                 <tr>
                   <th>Category</th>
+                  <th>Image</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -86,6 +87,16 @@ function Product() {
                   return (
                     <tr>
                       <td>{data.title}</td>
+                      <td>
+                        <div className="text-center">
+                          {
+                            <img
+                              className="category-img"
+                              src={`http://localhost:2022/${data.image}`}
+                            />
+                          }
+                        </div>
+                      </td>
                       <td>
                         <button
                           class="btn btn-outline-danger btn-sm ms-2"
