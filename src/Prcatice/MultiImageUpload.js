@@ -23,36 +23,28 @@ function MultiImageUpload() {
     const imagesArray = selectedFilesArray.map((file) => {
       return URL.createObjectURL(file);
     });
-    console.log(imagesArray);
 
     setSelectedImages((previousImages) => previousImages.concat(imagesArray));
 
     // FOR BUG IN CHROME
     event.target.value = "";
   };
-  console.log(finalFiles);
 
   function deleteHandler(image, index) {
-    console.log(index);
     finalFiles.image.splice(index, 1);
     setSelectedImages(selectedImages.filter((e) => e !== image));
-    console.log(finalFiles);
-
-    // setSelectedImages(selectedImages.filter((e) => e !== image));
-    // URL.revokeObjectURL(image);
-    // console.log(selectedImages);
+    URL.revokeObjectURL(image);
   }
+
   const handleClick = async (e) => {
     e.preventDefault();
     console.log(finalFiles);
     const formData = new FormData();
-
     Object.entries(finalFiles).forEach(([key, value]) => {
       value.map((e) => {
         formData.append(key, e);
       });
     });
-    console.log(formData);
     const data = await axios.post("http://localhost:2022/upload", formData, {
       headers: {
         Authorization: window.localStorage.getItem("myapptoken"),
@@ -65,7 +57,6 @@ function MultiImageUpload() {
       toast.success("SuccessFully Uploaded", toastOptions);
       window.location.reload();
     }
-    console.log(data);
   };
   return (
     <section>
@@ -102,8 +93,18 @@ function MultiImageUpload() {
           selectedImages.map((image, index) => {
             return (
               <div key={image} className="image">
-                <img src={image} height="200" alt="upload" />
-                <button onClick={() => deleteHandler(image, index)}>X</button>
+                <img
+                  className="preview-style"
+                  src={image}
+                  height="200"
+                  alt="upload"
+                />
+                <button
+                  className="rounded-pill"
+                  onClick={() => deleteHandler(image, index)}
+                >
+                  X
+                </button>
                 <p>{index + 1}</p>
               </div>
             );

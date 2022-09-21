@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import hidepassword from "../icons/hidepassword.png";
 import showpassword from "../icons/showPassword.png";
 import Select from "react-select";
+import request from "../api/api";
 
 const initialValues = {
   first_name: "",
@@ -26,6 +27,13 @@ const options = [
   { value: "transgender", label: "Transgender" },
 ];
 function Form() {
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -97,8 +105,21 @@ function Form() {
         id: "agree_terms",
       });
     }
-
-    console.log(inputs);
+    request({
+      url: `createform`,
+      method: "POST",
+      data: inputs,
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      console.log(res);
+      if (res.status !== 1) {
+        toast.error(res.message, toastOptions);
+      } else if (res.status === 1) {
+        toast.success(res.message, toastOptions);
+      }
+    });
   };
   return (
     <div className="register-wrap">
