@@ -72,6 +72,9 @@ const useCustomForm = ({ initialValues, onSubmit }) => {
     setErrors({ ...errors });
     onSubmit({ event, values, errors });
   };
+  const handleMultiSelectChange = (value = [], state) => {
+    setValues({ ...values, [state]: value });
+  };
   return {
     values,
     setValues,
@@ -85,6 +88,7 @@ const useCustomForm = ({ initialValues, onSubmit }) => {
     handleSelectChange,
     handleBlur,
     handleSubmit,
+    handleMultiSelectChange,
   };
 };
 export default useCustomForm;

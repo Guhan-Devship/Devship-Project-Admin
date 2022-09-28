@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useCustomForm from "../Component/UseCustomForm";
 import { ToastContainer, toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 import hidepassword from "../icons/hidepassword.png";
 import showpassword from "../icons/showPassword.png";
 import Select from "react-select";
@@ -10,6 +11,8 @@ const initialValues = {
   first_name: "",
   surname: "",
   gender: "",
+  skill: "",
+  role: "",
   email: "",
   password: "",
   confirmPassword: "",
@@ -27,6 +30,43 @@ const options = [
   { value: "transgender", label: "Transgender" },
 ];
 function Form() {
+  let navigate = useNavigate();
+  const [roleData, setRoleData] = useState([]);
+  const [skillData, setSkillData] = useState([]);
+  let getdata = async () => {
+    request({
+      url: `getRole`,
+      method: "GET",
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      setRoleData(res);
+      console.log(res);
+    });
+  };
+  let getSkill = async () => {
+    request({
+      url: `getSkill`,
+      method: "GET",
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      setSkillData(res);
+      console.log(res);
+    });
+  };
+  useEffect(() => {
+    getdata();
+    getSkill();
+  }, []);
+  const roleoptions = roleData.map((e) => {
+    return { value: `${e.role_name}`, label: `${e.role_name}` };
+  });
+  const skilloptions = skillData.map((e) => {
+    return { value: `${e.skill_name}`, label: `${e.skill_name}` };
+  });
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -48,6 +88,7 @@ function Form() {
     handleObjectChange,
     handleSubmit,
     handleSelectChange,
+    handleMultiSelectChange,
   } = useCustomForm({
     initialValues,
     onSubmit: () => onSubmit(),
@@ -58,6 +99,8 @@ function Form() {
     first_name,
     surname,
     gender,
+    role,
+    skill,
     email,
     password,
     confirmPassword,
@@ -105,6 +148,8 @@ function Form() {
         id: "agree_terms",
       });
     }
+    console.log(inputs);
+
     request({
       url: `createform`,
       method: "POST",
@@ -119,6 +164,7 @@ function Form() {
       } else if (res.status === 1) {
         toast.success(res.message, toastOptions);
       }
+      navigate("/formlist");
     });
   };
   return (
@@ -168,6 +214,31 @@ function Form() {
             </div>
           </div>
           <div className="col-sm-12 col-lg-6">
+            <div className="form-box">
+              <Select
+                name="role"
+                id="role"
+                placeholder="Role"
+                defaultValue={role}
+                onChange={(e) => handleSelectChange(e, "role")}
+                options={roleoptions}
+              />
+            </div>
+          </div>
+          <div className="col-sm-12 col-lg-6 mt-2">
+            <div className="form-box">
+              <Select
+                name="role"
+                id="role"
+                placeholder="Skill"
+                defaultValue={skill}
+                onChange={(e) => handleMultiSelectChange(e, "skill")}
+                options={skilloptions}
+                isMulti
+              />
+            </div>
+          </div>
+          <div className="col-sm-12 col-lg-6 mt-2">
             <div className="form-box">
               <input
                 type="email"

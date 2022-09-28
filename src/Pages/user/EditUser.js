@@ -130,7 +130,7 @@ function EditUser() {
               />
             </div>
             <div className="col-4 mt-5 ms-2">
-              <Link to={"/home/users"}>
+              <Link to={"/users"}>
                 <button className="btn btn-danger btn-sm me-2">cancel</button>
               </Link>
               <button

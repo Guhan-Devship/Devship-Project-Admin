@@ -1,17 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../Component/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import { useObjectUrl } from "../../useObjectUrl";
 import axios from "axios";
+import Select from "react-select";
+import request from "../../api/api";
 
 function CreateContact() {
+  const [roleData, setRoleData] = useState([]);
   let navigate = useNavigate();
-  // const {
-  //   objectURL: imagePreviewUrl,
-  //   setObject: setImage,
-  //   object: image,
-  // } = useObjectUrl();
+  let getdata = async () => {
+    request({
+      url: `getRole`,
+      method: "GET",
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      setRoleData(res);
+      console.log(res);
+    });
+  };
+  useEffect(() => {
+    getdata();
+  }, []);
+  const options = roleData.map((e) => {
+    return { value: `${e.role_name}`, label: `${e.role_name}` };
+  });
 
   const toastOptions = {
     position: "bottom-right",
@@ -25,6 +41,7 @@ function CreateContact() {
     name: "",
     organisation: "",
     gender: "",
+    role: "",
     mobile: "",
     email: "",
     message: "",
@@ -201,6 +218,15 @@ function CreateContact() {
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
+                <Select
+                  name="role"
+                  className="mt-2 col-4"
+                  id="role"
+                  placeholder="Role"
+                  defaultValue={contactDetail.role}
+                  // onChange={(e) => handleSelectChange(e, "role")}
+                  options={options}
+                />
                 <input
                   type="text"
                   className="form-control mt-2"

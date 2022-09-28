@@ -82,6 +82,7 @@ function User() {
                   <th>Name</th>
                   <th>Surnmae</th>
                   <th>Email</th>
+                  <th>Role</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -92,6 +93,7 @@ function User() {
                       <td>{user.first_name}</td>
                       <td>{user.surname}</td>
                       <td>{user.email}</td>
+                      <td>{user.role}</td>
                       <td>
                         <button
                           class="btn btn-outline-danger btn-sm ms-2"

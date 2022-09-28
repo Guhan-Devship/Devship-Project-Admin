@@ -29,7 +29,14 @@ import UseReducer from "./Prcatice/UseReducer";
 import UseMemo from "./Prcatice/UseMemo";
 import MultiImageUpload from "./Prcatice/MultiImageUpload";
 import UserCreate from "./Pages/user/UserCreate";
-export const UserContext = createContext();
+import Dashboard from "./Component/Dashboard";
+import OverView from "./Pages/profile/OverView";
+import Setting from "./Pages/profile/Setting";
+import Role from "./Pages/role/Role";
+import FormList from "./Prcatice/FormList";
+import ViewForm from "./Prcatice/ViewForm";
+import EditForm from "./Prcatice/EditForm";
+import Skill from "./Pages/skill/Skill";
 
 function App() {
   let user = localStorage.getItem("myapptoken");
@@ -43,23 +50,27 @@ function App() {
               <Navbar />
               <div class="container-fluid">
                 <Routes>
-                  <Route path="/home" element={<Home />}>
+                  <Route path="/" element={<Home />}>
+                    <Route path="dashboard" element={<Dashboard />} />
                     <Route path="users" element={<User />} />
                     <Route path="product" element={<Product />} />
                     <Route path="order" element={<Order />} />
                     <Route path="contact" element={<Contact />} />
                     <Route path="upload" element={<MultiImageUpload />} />
+                    <Route path="role" element={<Role />} />
+                    <Route path="skill" element={<Skill />} />
+                    <Route path="formlist" element={<FormList />} />
                   </Route>
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="home/users/createnew" element={<UserCreate />} />
-                  <Route
-                    path="home/users/edit-user/:id"
-                    element={<EditUser />}
-                  />
-                  <Route
-                    path="home/users/view-user/:id"
-                    element={<ViewUser />}
-                  />
+                  <Route path="/overview" element={<Profile />}>
+                    <Route path="profile" element={<OverView />} />
+                    <Route path="setting" element={<Setting />} />
+                  </Route>
+                  <Route path="formlist/create" element={<Form />} />
+                  <Route path="formlist/view/:id" element={<ViewForm />} />
+                  <Route path="formlist/editform/:id" element={<EditForm />} />
+                  <Route path="users/createnew" element={<UserCreate />} />
+                  <Route path="users/edit-user/:id" element={<EditUser />} />
+                  <Route path="users/view-user/:id" element={<ViewUser />} />
                   <Route path="/create-category" element={<CreateProduct />} />
                   <Route path="/view/:id" element={<ListProduct />} />
                   <Route path="/create-product" element={<CreateNew />} />

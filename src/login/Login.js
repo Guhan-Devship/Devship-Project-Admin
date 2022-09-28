@@ -38,7 +38,7 @@ function Login() {
         } else if (res.response.admin === true) {
           window.localStorage.setItem("myapptoken", res.response.authToken);
           window.localStorage.setItem("id", res.response.id);
-          navigate("/home");
+          navigate("/dashboard");
           window.location.reload();
         }
       });
