@@ -90,6 +90,9 @@ function Sidebar() {
                 <Link to={"formList"} class="collapse-item">
                   Form
                 </Link>
+                <Link to={"pricing"} class="collapse-item">
+                  Pricing
+                </Link>
               </div>
             </div>
           </li>

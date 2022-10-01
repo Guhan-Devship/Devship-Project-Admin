@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -37,6 +37,7 @@ import FormList from "./Prcatice/FormList";
 import ViewForm from "./Prcatice/ViewForm";
 import EditForm from "./Prcatice/EditForm";
 import Skill from "./Pages/skill/Skill";
+import Pricing from "./Pages/pricing/Pricing";
 
 function App() {
   let user = localStorage.getItem("myapptoken");
@@ -60,6 +61,7 @@ function App() {
                     <Route path="role" element={<Role />} />
                     <Route path="skill" element={<Skill />} />
                     <Route path="formlist" element={<FormList />} />
+                    <Route path="pricing" element={<Pricing />} />
                   </Route>
                   <Route path="/overview" element={<Profile />}>
                     <Route path="profile" element={<OverView />} />
@@ -84,6 +86,18 @@ function App() {
                   <Route path="/form" element={<Form />} />
                   <Route path="/reducer" element={<UseReducer />} />
                   <Route path="/memo" element={<UseMemo />} />
+                  <Route
+                    path="/404"
+                    element={
+                      <div className="text-center mt-5">
+                        Choose the correct path{" "}
+                        <div>
+                          <h3>Error 404 page not found</h3>
+                        </div>
+                      </div>
+                    }
+                  />
+                  <Route path="*" element={<Navigate replace to="/404" />} />
                 </Routes>
               </div>
             </div>

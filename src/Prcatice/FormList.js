@@ -89,8 +89,8 @@ function FormList() {
                     <tr>
                       <td>{data.first_name}</td>
                       <td>{data.surname}</td>
-                      <td>{data.gender}</td>
-                      <td>{data?.role}</td>
+                      <td>{data.genderValue[0]}</td>
+                      <td>{data.roleValue[0]}</td>
                       <td>{data.email}</td>
                       <td>{data.phone.number}</td>
                       <td>

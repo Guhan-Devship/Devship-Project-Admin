@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import request from "../api/api";
 import Select from "react-select";
 import useCustomForm from "../Component/UseCustomForm";
@@ -8,7 +8,9 @@ import { ToastContainer, toast } from "react-toastify";
 const initialValues = {
   first_name: "",
   surname: "",
-  gender: "",
+  roleValue: "",
+  skill: "",
+  genderValue: "",
   email: "",
   phone: {
     number: "",
@@ -17,6 +19,7 @@ const initialValues = {
   },
 };
 function EditForm() {
+  let navigate = useNavigate();
   useEffect(() => {
     getdata();
     getRole();
@@ -59,12 +62,10 @@ function EditForm() {
       setValues({
         first_name: res.first_name,
         surname: res.surname,
-        gender: { value: res.gender, label: res.gender },
+        genderValue: res.genderValue[0],
         email: res.email,
-        role: { value: res.role, label: res.role },
-        skill: res.skill.map((e) => {
-          return { value: e.value, label: e.label };
-        }),
+        roleValue: res.roleValue[0],
+        skill: res.skill,
         phone: {
           number: res.phone.number,
           code: "",
@@ -72,6 +73,7 @@ function EditForm() {
         },
       });
       console.log(res);
+      console.log(res.genderValue[0]);
     });
   };
 
@@ -96,12 +98,15 @@ function EditForm() {
     handleObjectChange,
     handleSubmit,
     handleSelectChange,
+    handleMultiSelectChange,
   } = useCustomForm({
     initialValues,
     onSubmit: () => onSubmit(),
   });
 
-  const { first_name, surname, gender, role, email, phone, skill } = inputs;
+  const { first_name, surname, genderValue, roleValue, email, phone, skill } =
+    inputs;
+  console.log(skill);
   const roleoptions = roleData.map((e) => {
     return { value: `${e.role_name}`, label: `${e.role_name}` };
   });
@@ -140,10 +145,11 @@ function EditForm() {
       },
     }).then((res) => {
       console.log(res);
-      if (res.status !== 1) {
+      if (res.message !== "Updated") {
         toast.error(res.message, toastOptions);
-      } else if (res.status === 1) {
+      } else if (res.message === "Updated") {
         toast.success(res.message, toastOptions);
+        navigate("/formList");
       }
     });
   };
@@ -186,9 +192,9 @@ function EditForm() {
                 name="gender"
                 id="gender"
                 placeholder="Gender"
-                defaultValue={gender}
-                value={gender}
-                onChange={(e) => handleSelectChange(e, "gender")}
+                defaultValue={genderValue}
+                value={{ value: genderValue, label: genderValue }}
+                onChange={(e) => handleSelectChange(e, "genderValue")}
                 options={options}
               />
               <label htmlFor="gender">Gender</label>
@@ -200,9 +206,9 @@ function EditForm() {
                 name="role"
                 id="role"
                 placeholder="Role"
-                defaultValue={role}
-                value={role}
-                onChange={(e) => handleSelectChange(e, "role")}
+                defaultValue={roleValue}
+                value={{ value: roleValue, label: roleValue }}
+                onChange={(e) => handleSelectChange(e, "roleValue")}
                 options={roleoptions}
               />
             </div>
@@ -215,8 +221,9 @@ function EditForm() {
                 placeholder="Skill"
                 defaultValue={skill}
                 value={skill}
-                onChange={(e) => handleSelectChange(e, "role")}
+                onChange={(e) => handleMultiSelectChange(e, "skill")}
                 options={skilloptions}
+                isMulti
               />
             </div>
           </div>

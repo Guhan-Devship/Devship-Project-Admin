@@ -78,15 +78,19 @@ function ViewForm() {
                 <p>Role</p>
                 <p>Email</p>
                 <p>phone</p>
+                <p>Deposit</p>
+                <p>Deposit with Additional Charges</p>
                 <p>skill</p>
               </div>
               <div className="col-6">
                 <p>: {formData.first_name}</p>
                 <p>: {formData.surname}</p>
-                <p>: {formData.gender}</p>
-                <p>: {formData.role}</p>
+                <p>: {formData.genderValue}</p>
+                <p>: {formData.roleValue}</p>
                 <p>: {formData.email}</p>
                 <p>: {formData?.phone?.number}</p>
+                <p>: {formData.depositAmount}</p>
+                <p>: {formData.totalAmount}</p>
                 <p>
                   <ul>
                     {formData?.skill?.map((e) => {

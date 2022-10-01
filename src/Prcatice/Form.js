@@ -6,6 +6,7 @@ import hidepassword from "../icons/hidepassword.png";
 import showpassword from "../icons/showPassword.png";
 import Select from "react-select";
 import request from "../api/api";
+import { parseInt } from "lodash";
 
 const initialValues = {
   first_name: "",
@@ -17,6 +18,8 @@ const initialValues = {
   password: "",
   confirmPassword: "",
   agree_terms: false,
+  depositAmount: 0,
+  totalAmount: 0,
   phone: {
     number: "",
     code: "",
@@ -30,59 +33,9 @@ const options = [
   { value: "transgender", label: "Transgender" },
 ];
 function Form() {
-  let navigate = useNavigate();
-  const [roleData, setRoleData] = useState([]);
-  const [skillData, setSkillData] = useState([]);
-  let getdata = async () => {
-    request({
-      url: `getRole`,
-      method: "GET",
-      headers: {
-        Authorization: window.localStorage.getItem("myapptoken"),
-      },
-    }).then((res) => {
-      setRoleData(res);
-      console.log(res);
-    });
-  };
-  let getSkill = async () => {
-    request({
-      url: `getSkill`,
-      method: "GET",
-      headers: {
-        Authorization: window.localStorage.getItem("myapptoken"),
-      },
-    }).then((res) => {
-      setSkillData(res);
-      console.log(res);
-    });
-  };
-  useEffect(() => {
-    getdata();
-    getSkill();
-  }, []);
-  const roleoptions = roleData.map((e) => {
-    return { value: `${e.role_name}`, label: `${e.role_name}` };
-  });
-  const skilloptions = skillData.map((e) => {
-    return { value: `${e.skill_name}`, label: `${e.skill_name}` };
-  });
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 8000,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-  };
-  const validateEmail = (email) => {
-    return String(email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-  };
   const {
     values: inputs,
+    setValues,
     handleCheckedChange,
     handleChange,
     handleObjectChange,
@@ -93,17 +46,117 @@ function Form() {
     initialValues,
     onSubmit: () => onSubmit(),
   });
+  let navigate = useNavigate();
+  const [roleData, setRoleData] = useState([]);
+  const [skillData, setSkillData] = useState([]);
+
+  let getdata = async () => {
+    request({
+      url: `getRole`,
+      method: "GET",
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      setRoleData(res);
+    });
+  };
+
+  let getSkill = async () => {
+    request({
+      url: `getSkill`,
+      method: "GET",
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      setSkillData(res);
+    });
+  };
+
+  let getPricing = async () => {
+    request({
+      url: `getPricing`,
+      method: "GET",
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      setPricing(res);
+    });
+  };
+
+  useEffect(() => {
+    getdata();
+    getSkill();
+    getPricing();
+  }, []);
+  const [pricing, setPricing] = useState([]);
+  const getFormattedPrice = (price) => `${price}`;
+  const [checkedState, setCheckedState] = useState(new Array(5).fill(false));
+
+  const handleOnChange = (position) => {
+    const updatedCheckedState = checkedState.map((item, index) =>
+      index === position ? !item : item
+    );
+
+    setCheckedState(updatedCheckedState);
+
+    const totalPrice = updatedCheckedState.reduce(
+      (sum, currentState, index) => {
+        if (currentState === true) {
+          if (pricing[index].pricing_name !== "Percentage Margin") {
+            return sum + pricing[index].price;
+          } else {
+            return sum + (pricing[index].price / 100) * depositAmount;
+          }
+        }
+        return sum;
+      },
+      0
+    );
+
+    // setTotal(parseInt(depositAmount) + totalPrice);
+    setValues({ ...inputs, totalAmount: parseInt(depositAmount) + totalPrice });
+  };
+
+  const roleoptions = roleData.map((e) => {
+    return { value: `${e.role_name}`, label: `${e.role_name}` };
+  });
+
+  const skilloptions = skillData.map((e) => {
+    return { value: `${e.skill_name}`, label: `${e.skill_name}` };
+  });
+
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
   const [isRevealPwd, setIsRevealPwd] = useState(false);
   const [isRevealConfirmPwd, setIsRevealConfirmPwd] = useState(false);
   const {
     first_name,
     surname,
-    gender,
-    role,
+    genderValue,
+    roleValue,
     skill,
     email,
     password,
     confirmPassword,
+    depositAmount,
+    totalAmount,
     agree_terms,
     phone,
   } = inputs;
@@ -200,14 +253,14 @@ function Form() {
             </div>
           </div>
         </div>
-        <div>
+        <div className="row">
           <div className="col-sm-12 col-lg-6">
             <div className="form-box">
               <Select
                 name="gender"
                 id="gender"
-                defaultValue={gender}
-                onChange={(e) => handleSelectChange(e, "gender")}
+                defaultValue={genderValue}
+                onChange={(e) => handleSelectChange(e, "genderValue")}
                 options={options}
               />
               <label htmlFor="gender">Gender</label>
@@ -219,8 +272,8 @@ function Form() {
                 name="role"
                 id="role"
                 placeholder="Role"
-                defaultValue={role}
-                onChange={(e) => handleSelectChange(e, "role")}
+                defaultValue={roleValue}
+                onChange={(e) => handleSelectChange(e, "roleValue")}
                 options={roleoptions}
               />
             </div>
@@ -265,7 +318,7 @@ function Form() {
             </div>
           </div>
         </div>
-        <div>
+        <div className="row">
           <div className="col-sm-12 col-lg-6">
             <div className="form-box">
               <input
@@ -305,6 +358,57 @@ function Form() {
                 onClick={() => setIsRevealConfirmPwd((prevState) => !prevState)}
               />
             </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-4">
+            <input
+              type="number"
+              className="form-control"
+              name="depositAmount"
+              id="depositAmount"
+              value={depositAmount}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-4">
+            <input
+              type="number"
+              className="form-control"
+              name="totalAmount"
+              id="totalAmount"
+              value={totalAmount}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="box-flex">
+            {pricing?.map(({ pricing_name, price }, index) => {
+              return (
+                <li className="pricing-list" key={index}>
+                  <div className="tac-box">
+                    <input
+                      type="checkbox"
+                      name={pricing_name}
+                      id={`pricing_name-${index}`}
+                      value={pricing_name}
+                      checked={checkedState[index]}
+                      onChange={() => handleOnChange(index)}
+                    />
+                    {pricing_name === "Percentage Margin" ? (
+                      <label htmlFor={`pricing_name-${index}`}>
+                        {pricing_name}
+                        --{getFormattedPrice(price)}%
+                      </label>
+                    ) : (
+                      <label htmlFor={`pricing_name-${index}`}>
+                        {pricing_name}
+                        --Rs {getFormattedPrice(price)}
+                      </label>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
           </div>
         </div>
         <div className="box-flex">

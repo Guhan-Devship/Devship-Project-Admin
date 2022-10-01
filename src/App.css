@@ -403,3 +403,7 @@ input:checked + .slider:before {
   height:600px;
   overflow-y: scroll!important;
 }
+
+.pricing-list{
+  list-style-type: none;
+}
