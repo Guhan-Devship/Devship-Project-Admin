@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import request from "../../api/api";
+import { UserContext } from "../../context/UserContext";
 import CreatePricing from "./CreatePricing";
 
 function Pricing() {
+  const { users } = useContext(UserContext);
+  console.log(users);
   let navigate = useNavigate();
   const toastOptions = {
     position: "bottom-right",
@@ -89,9 +92,13 @@ function Pricing() {
             Price List<br></br>
           </h6>
           <p></p>
-          <button className="btn btn-primary btn-sm" onClick={handleClick}>
-            Create New
-          </button>
+          {users.pricingCreate === true ? (
+            <button className="btn btn-primary btn-sm" onClick={handleClick}>
+              Create New
+            </button>
+          ) : (
+            ""
+          )}
         </div>
         <div class="card-body">
           <div class="table-responsive table-scroll">
@@ -115,21 +122,29 @@ function Pricing() {
                       <td>{list.pricing_name}</td>
                       <td>{list.price}</td>
                       <td>
-                        <button
-                          class="btn btn-outline-danger btn-sm ms-2"
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          title="delete"
-                          onClick={() => handleDelete(list._id)}
-                        >
-                          Remove
-                        </button>
-                        <button
-                          className="btn btn-outline-warning btn-sm ms-2"
-                          //   onClick={() => handleEditClick(list._id)}
-                        >
-                          Edit
-                        </button>
+                        {users.pricingDelete === true ? (
+                          <button
+                            class="btn btn-outline-danger btn-sm ms-2"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="delete"
+                            onClick={() => handleDelete(list._id)}
+                          >
+                            Remove
+                          </button>
+                        ) : (
+                          ""
+                        )}
+                        {users.pricingEdit === true ? (
+                          <button
+                            className="btn btn-outline-warning btn-sm ms-2"
+                            //   onClick={() => handleEditClick(list._id)}
+                          >
+                            Edit
+                          </button>
+                        ) : (
+                          ""
+                        )}
                       </td>
                     </tr>
                   );

@@ -40,6 +40,7 @@ import Skill from "./Pages/skill/Skill";
 import Pricing from "./Pages/pricing/Pricing";
 import Subadmins from "./Pages/profile/subadmins/Subadmins";
 import { UserContext } from "./context/UserContext";
+import Drive from "./Pages/Drive/Drive";
 
 function App() {
   let user = localStorage.getItem("myapptoken");
@@ -97,6 +98,7 @@ function App() {
                       ""
                     )}
                     <Route path="upload" element={<MultiImageUpload />} />
+                    <Route path="drive" element={<Drive />} />
                   </Route>
                   <Route path="/overview" element={<Profile />}>
                     <Route path="profile" element={<OverView />} />
@@ -106,7 +108,12 @@ function App() {
                   <Route path="formlist/create" element={<Form />} />
                   <Route path="formlist/view/:id" element={<ViewForm />} />
                   <Route path="formlist/editform/:id" element={<EditForm />} />
-                  <Route path="users/createnew" element={<UserCreate />} />
+                  {users.role === "admin" ? (
+                    <Route path="users/createnew" element={<UserCreate />} />
+                  ) : (
+                    ""
+                  )}
+
                   {users.userView === true ? (
                     <Route path="users/view-user/:id" element={<ViewUser />} />
                   ) : (
@@ -117,8 +124,15 @@ function App() {
                   ) : (
                     ""
                   )}
+                  {users.role === "admin" ? (
+                    <Route
+                      path="/create-category"
+                      element={<CreateProduct />}
+                    />
+                  ) : (
+                    ""
+                  )}
 
-                  <Route path="/create-category" element={<CreateProduct />} />
                   <Route path="/view/:id" element={<ListProduct />} />
                   <Route path="/create-product" element={<CreateNew />} />
                   {users.productView === true ? (
@@ -131,9 +145,23 @@ function App() {
                   ) : (
                     ""
                   )}
-                  <Route path="/create-contact" element={<CreateContact />} />
-                  <Route path="/view-contact/:id" element={<ViewContact />} />
-                  <Route path="/edit-contact/:id" element={<EditContact />} />
+                  {users.role === "admin" ? (
+                    <Route path="/create-contact" element={<CreateContact />} />
+                  ) : (
+                    ""
+                  )}
+
+                  {users.contactView === true ? (
+                    <Route path="/view-contact/:id" element={<ViewContact />} />
+                  ) : (
+                    ""
+                  )}
+                  {users.contactEdit === true ? (
+                    <Route path="/edit-contact/:id" element={<EditContact />} />
+                  ) : (
+                    ""
+                  )}
+
                   <Route path="/ref" element={<UseRef />} />
                   <Route path="/call" element={<UseCallBack />} />
                   <Route path="/form" element={<Form />} />

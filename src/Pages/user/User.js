@@ -97,32 +97,43 @@ function User() {
                       <td>{user.email}</td>
                       <td>{user.role}</td>
                       <td>
-                        <button
-                          class="btn btn-outline-danger btn-sm ms-2"
-                          onClick={() => handleDelete(user._id)}
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          title="delete"
-                          disabled={users.userDelete !== true}
-                        >
-                          Remove
-                        </button>
-                        <Link to={`edit-user/${user._id}`}>
+                        {users.userDelete === true ? (
                           <button
-                            className="btn btn-outline-warning btn-sm ms-2"
-                            disabled={users.userEdit !== true}
+                            class="btn btn-outline-danger btn-sm ms-2"
+                            onClick={() => handleDelete(user._id)}
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="delete"
                           >
-                            Edit
+                            Remove
                           </button>
-                        </Link>
-                        <Link to={`view-user/${user._id}`}>
-                          <button
-                            className="btn btn-outline-primary btn-sm ms-2"
-                            disabled={users.userView !== true}
-                          >
-                            View
-                          </button>
-                        </Link>
+                        ) : (
+                          ""
+                        )}
+                        {users.userEdit === true ? (
+                          <Link to={`edit-user/${user._id}`}>
+                            <button
+                              className="btn btn-outline-warning btn-sm ms-2"
+                              disabled={users.userEdit !== true}
+                            >
+                              Edit
+                            </button>
+                          </Link>
+                        ) : (
+                          ""
+                        )}
+                        {users.userView === true ? (
+                          <Link to={`view-user/${user._id}`}>
+                            <button
+                              className="btn btn-outline-primary btn-sm ms-2"
+                              disabled={users.userView !== true}
+                            >
+                              View
+                            </button>
+                          </Link>
+                        ) : (
+                          ""
+                        )}
                       </td>
                     </tr>
                   );

@@ -115,23 +115,31 @@ function Role() {
                     <tr>
                       <td>{list.role_name}</td>
                       <td>
-                        <button
-                          class="btn btn-outline-danger btn-sm ms-2"
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          title="delete"
-                          onClick={() => handleDelete(list._id)}
-                          disabled={users.roleDelete !== true}
-                        >
-                          Remove
-                        </button>
-                        <button
-                          className="btn btn-outline-warning btn-sm ms-2"
-                          onClick={() => handleEditClick(list._id)}
-                          disabled={users.roleEdit !== true}
-                        >
-                          Edit
-                        </button>
+                        {users.roleDelete === true ? (
+                          <button
+                            class="btn btn-outline-danger btn-sm ms-2"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="delete"
+                            onClick={() => handleDelete(list._id)}
+                          >
+                            {" "}
+                            Remove
+                          </button>
+                        ) : (
+                          ""
+                        )}
+                        {users.roleEdit === true ? (
+                          <button
+                            className="btn btn-outline-warning btn-sm ms-2"
+                            onClick={() => handleEditClick(list._id)}
+                            disabled={users.roleEdit !== true}
+                          >
+                            Edit
+                          </button>
+                        ) : (
+                          ""
+                        )}
                       </td>
                     </tr>
                   );

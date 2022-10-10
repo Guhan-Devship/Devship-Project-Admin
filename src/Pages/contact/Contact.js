@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../Component/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import { UserContext } from "../../context/UserContext";
 
 function Contact() {
+  const { users } = useContext(UserContext);
   let navigate = useNavigate();
   const toastOptions = {
     position: "bottom-right",
@@ -66,9 +68,13 @@ function Contact() {
             </span>
           </h6>
           <p></p>
-          <Link to={"/create-contact"}>
-            <button className="btn btn-primary btn-sm">Create Contact</button>
-          </Link>
+          {users.contactCreate === true ? (
+            <Link to={"/create-contact"}>
+              <button className="btn btn-primary btn-sm">Create Contact</button>
+            </Link>
+          ) : (
+            ""
+          )}
         </div>
         <div class="card-body">
           <div class="table-responsive table-scroll">
@@ -100,25 +106,37 @@ function Contact() {
                       <td>{data.email}</td>
                       <td>{data.message}</td>
                       <td>
-                        <button
-                          class="btn btn-outline-danger btn-sm ms-2"
-                          onClick={() => handleDelete(data._id)}
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          title="delete"
-                        >
-                          Remove
-                        </button>
-                        <Link to={`/edit-contact/${data._id}`}>
-                          <button className="btn btn-outline-warning btn-sm ms-2">
-                            Edit
+                        {users.contactDelete === true ? (
+                          <button
+                            class="btn btn-outline-danger btn-sm ms-2"
+                            onClick={() => handleDelete(data._id)}
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="delete"
+                          >
+                            Remove
                           </button>
-                        </Link>
-                        <Link to={`/view-contact/${data._id}`}>
-                          <button className="btn btn-outline-primary btn-sm ms-2">
-                            View
-                          </button>
-                        </Link>
+                        ) : (
+                          ""
+                        )}
+                        {users.contactEdit === true ? (
+                          <Link to={`/edit-contact/${data._id}`}>
+                            <button className="btn btn-outline-warning btn-sm ms-2">
+                              Edit
+                            </button>
+                          </Link>
+                        ) : (
+                          ""
+                        )}
+                        {users.contactView === true ? (
+                          <Link to={`/view-contact/${data._id}`}>
+                            <button className="btn btn-outline-primary btn-sm ms-2">
+                              View
+                            </button>
+                          </Link>
+                        ) : (
+                          ""
+                        )}
                       </td>
                     </tr>
                   );

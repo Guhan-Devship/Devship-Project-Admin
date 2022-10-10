@@ -64,9 +64,13 @@ function ListProduct() {
       <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Details</h6>
-          <Link to={"/create-product"}>
-            <button className="btn btn-primary btn-sm">Create </button>
-          </Link>
+          {users.role === "admin" ? (
+            <Link to={"/create-product"}>
+              <button className="btn btn-primary btn-sm">Create </button>
+            </Link>
+          ) : (
+            ""
+          )}
         </div>
         <div class="card-body">
           <div class="table-responsive table-scroll">
@@ -99,32 +103,43 @@ function ListProduct() {
                       <td>{data.price}</td>
                       <td>{data.offerPrice}</td>
                       <td>
-                        <button
-                          class="btn btn-outline-danger btn-sm ms-2"
-                          onClick={() => handleDelete(data._id)}
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          title="delete"
-                          disabled={users.productDelete !== true}
-                        >
-                          Remove
-                        </button>
-                        <Link to={`/editList/${data._id}`}>
+                        {users.productDelete === true ? (
                           <button
-                            className="btn btn-outline-warning btn-sm ms-2"
-                            disabled={users.productEdit !== true}
+                            class="btn btn-outline-danger btn-sm ms-2"
+                            onClick={() => handleDelete(data._id)}
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="delete"
                           >
-                            Edit
+                            Remove
                           </button>
-                        </Link>
-                        <Link to={`/viewList/${data._id}`}>
-                          <button
-                            className="btn btn-outline-primary btn-sm ms-2"
-                            disabled={users.productView !== true}
-                          >
-                            View
-                          </button>
-                        </Link>
+                        ) : (
+                          ""
+                        )}
+                        {users.productEdit === true ? (
+                          <Link to={`/editList/${data._id}`}>
+                            <button
+                              className="btn btn-outline-warning btn-sm ms-2"
+                              disabled={users.productEdit !== true}
+                            >
+                              Edit
+                            </button>
+                          </Link>
+                        ) : (
+                          ""
+                        )}
+                        {users.productView === true ? (
+                          <Link to={`/viewList/${data._id}`}>
+                            <button
+                              className="btn btn-outline-primary btn-sm ms-2"
+                              disabled={users.productView !== true}
+                            >
+                              View
+                            </button>
+                          </Link>
+                        ) : (
+                          ""
+                        )}
                       </td>
                     </tr>
                   );
