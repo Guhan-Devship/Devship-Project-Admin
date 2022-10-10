@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import request from "../../api/api";
 import { ToastContainer, toast } from "react-toastify";
 import CreateSkill from "./CreateSkill";
 import EditSkill from "./EditSkill";
+import { UserContext } from "../../context/UserContext";
 
 function Skill() {
+  const { users } = useContext(UserContext);
   const [openModal, setOpenModal] = useState(false);
   const [openEditSkill, setOpenEditSkill] = useState(false);
   const [skillData, setSkillData] = useState([]);
@@ -85,7 +87,11 @@ function Skill() {
             Skill List<br></br>
           </h6>
           <p></p>
-          <button className="btn btn-primary btn-sm" onClick={handleClick}>
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={handleClick}
+            disabled={users.skillCreate !== true}
+          >
             Create Skill
           </button>
         </div>
@@ -115,12 +121,14 @@ function Skill() {
                           data-placement="bottom"
                           title="delete"
                           onClick={() => handleDelete(list._id)}
+                          disabled={users.skillDelete !== true}
                         >
                           Remove
                         </button>
                         <button
                           className="btn btn-outline-warning btn-sm ms-2"
                           onClick={() => handleEditClick(list._id)}
+                          disabled={users.skillEdit !== true}
                         >
                           Edit
                         </button>

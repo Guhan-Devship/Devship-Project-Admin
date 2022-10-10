@@ -1,10 +1,12 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Navbar from "../../Component/Navbar";
+import { UserContext } from "../../context/UserContext";
 
 function ListProduct() {
+  const { users } = useContext(UserContext);
   function fetch() {
     if (!localStorage.getItem("myapptoken")) {
       navigate("/");
@@ -103,16 +105,23 @@ function ListProduct() {
                           data-toggle="tooltip"
                           data-placement="bottom"
                           title="delete"
+                          disabled={users.productDelete !== true}
                         >
                           Remove
                         </button>
                         <Link to={`/editList/${data._id}`}>
-                          <button className="btn btn-outline-warning btn-sm ms-2">
+                          <button
+                            className="btn btn-outline-warning btn-sm ms-2"
+                            disabled={users.productEdit !== true}
+                          >
                             Edit
                           </button>
                         </Link>
                         <Link to={`/viewList/${data._id}`}>
-                          <button className="btn btn-outline-primary btn-sm ms-2">
+                          <button
+                            className="btn btn-outline-primary btn-sm ms-2"
+                            disabled={users.productView !== true}
+                          >
                             View
                           </button>
                         </Link>

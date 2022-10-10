@@ -74,7 +74,7 @@ function EditUser() {
       .catch((err) => {
         console.log(err);
       });
-    navigate("/home/users", { replace: true });
+    navigate("/users", { replace: true });
   };
   return (
     <>

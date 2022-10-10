@@ -1,10 +1,12 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Navbar from "../../Component/Navbar";
+import { UserContext } from "../../context/UserContext";
 
 function User() {
+  const { users } = useContext(UserContext);
   const [userData, setUserData] = useState([]);
   let navigate = useNavigate();
   const toastOptions = {
@@ -101,16 +103,23 @@ function User() {
                           data-toggle="tooltip"
                           data-placement="bottom"
                           title="delete"
+                          disabled={users.userDelete !== true}
                         >
                           Remove
                         </button>
                         <Link to={`edit-user/${user._id}`}>
-                          <button className="btn btn-outline-warning btn-sm ms-2">
+                          <button
+                            className="btn btn-outline-warning btn-sm ms-2"
+                            disabled={users.userEdit !== true}
+                          >
                             Edit
                           </button>
                         </Link>
                         <Link to={`view-user/${user._id}`}>
-                          <button className="btn btn-outline-primary btn-sm ms-2">
+                          <button
+                            className="btn btn-outline-primary btn-sm ms-2"
+                            disabled={users.userView !== true}
+                          >
                             View
                           </button>
                         </Link>

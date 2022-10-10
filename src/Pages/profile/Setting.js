@@ -21,10 +21,9 @@ function Setting() {
     object: image,
   } = useObjectUrl();
   const [values, setValue] = useState({
-    first_name: users.first_name,
-    surname: users.surname,
+    name: users.name,
+    last_name: users.last_name,
     email: users.email,
-    phone: users.phone,
     image: null,
   });
   const handleChange = (e) => {
@@ -52,32 +51,47 @@ function Setting() {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    if (values.image === null) {
-      const { first_name, surname, email, phone } = values;
-    } else {
-      const { first_name, surname, email, image, phone } = values;
-    }
+    console.log(values);
 
     const formData = new FormData();
 
     Object.entries(values).forEach(([key, value]) =>
       formData.append(key, value)
     );
-    request({
-      url: `updateUser/${users._id}`,
-      method: "PUT",
-      data: formData,
-      headers: {
-        Authorization: window.localStorage.getItem("myapptoken"),
-      },
-    }).then((res) => {
-      if (res.message !== "Updated") {
-        toast.error(res.message, toastOptions);
-      }
-      if (res.message === "Updated") {
-        toast.success(res.message, toastOptions);
-      }
-    });
+    {
+      users.role === "admin"
+        ? request({
+            url: `updateadmin/${users._id}`,
+            method: "PUT",
+            data: formData,
+            headers: {
+              Authorization: window.localStorage.getItem("myapptoken"),
+            },
+          }).then((res) => {
+            console.log(res);
+            if (res.message !== "Updated") {
+              toast.error(res.message, toastOptions);
+            }
+            if (res.message === "Updated") {
+              toast.success(res.message, toastOptions);
+            }
+          })
+        : request({
+            url: `updatesubadmin/${users._id}`,
+            method: "PUT",
+            data: formData,
+            headers: {
+              Authorization: window.localStorage.getItem("myapptoken"),
+            },
+          }).then((res) => {
+            if (res.message !== "Updated") {
+              toast.error(res.message, toastOptions);
+            }
+            if (res.message === "Updated") {
+              toast.success(res.message, toastOptions);
+            }
+          });
+    }
   };
 
   let handleDelete = async (image, e) => {
@@ -187,9 +201,9 @@ function Setting() {
                 type="text"
                 className="form-control"
                 placeholder="username"
-                id="first_name"
-                name="first_name"
-                value={values.first_name}
+                id="name"
+                name="name"
+                value={values.name}
                 onChange={handleChange}
               />
             </div>
@@ -200,10 +214,10 @@ function Setting() {
               <input
                 type="text"
                 className="form-control"
-                placeholder="surname"
-                id="surname"
-                name="surname"
-                value={values.surname}
+                placeholder="lastname"
+                id="last_name"
+                name="last_name"
+                value={values.last_name}
                 onChange={handleChange}
               />
             </div>
@@ -222,7 +236,7 @@ function Setting() {
               />
             </div>
           </div>
-          <div className="row m-3">
+          {/* <div className="row m-3">
             <div className="col-4">Phone</div>
             <div className="col-8">
               <input
@@ -235,7 +249,7 @@ function Setting() {
                 onChange={handleChange}
               />
             </div>
-          </div>
+          </div> */}
           <div className="row m-3">
             <div className="col-4">Active</div>
             <div className="col-8">

@@ -19,7 +19,7 @@ import Contact from "./Pages/contact/Contact";
 import CreateContact from "./Pages/contact/CreateContact";
 import ViewContact from "./Pages/contact/ViewConatct";
 import EditContact from "./Pages/contact/EditContact";
-import { createContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import UseRef from "./Prcatice/UseRef";
 import UseCallBack from "./Prcatice/UseCallBack";
 import Form from "./Prcatice/Form";
@@ -38,9 +38,12 @@ import ViewForm from "./Prcatice/ViewForm";
 import EditForm from "./Prcatice/EditForm";
 import Skill from "./Pages/skill/Skill";
 import Pricing from "./Pages/pricing/Pricing";
+import Subadmins from "./Pages/profile/subadmins/Subadmins";
+import { UserContext } from "./context/UserContext";
 
 function App() {
   let user = localStorage.getItem("myapptoken");
+  const { users, setUserData } = useContext(UserContext);
   return (
     <BrowserRouter>
       {user ? (
@@ -53,31 +56,81 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Home />}>
                     <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="users" element={<User />} />
-                    <Route path="product" element={<Product />} />
-                    <Route path="order" element={<Order />} />
-                    <Route path="contact" element={<Contact />} />
+                    {users.users === true ? (
+                      <Route path="users" element={<User />} />
+                    ) : (
+                      ""
+                    )}
+                    {users.products === true ? (
+                      <Route path="product" element={<Product />} />
+                    ) : (
+                      ""
+                    )}
+                    {users.orders === true ? (
+                      <Route path="order" element={<Order />} />
+                    ) : (
+                      ""
+                    )}
+                    {users.utilitiContact === true ? (
+                      <Route path="contact" element={<Contact />} />
+                    ) : (
+                      ""
+                    )}
+                    {users.utilitiRole === true ? (
+                      <Route path="role" element={<Role />} />
+                    ) : (
+                      ""
+                    )}
+                    {users.utilitiSkill === true ? (
+                      <Route path="skill" element={<Skill />} />
+                    ) : (
+                      ""
+                    )}
+                    {users.utilitiForm === true ? (
+                      <Route path="formlist" element={<FormList />} />
+                    ) : (
+                      ""
+                    )}
+                    {users.utilitiPricing === true ? (
+                      <Route path="pricing" element={<Pricing />} />
+                    ) : (
+                      ""
+                    )}
                     <Route path="upload" element={<MultiImageUpload />} />
-                    <Route path="role" element={<Role />} />
-                    <Route path="skill" element={<Skill />} />
-                    <Route path="formlist" element={<FormList />} />
-                    <Route path="pricing" element={<Pricing />} />
                   </Route>
                   <Route path="/overview" element={<Profile />}>
                     <Route path="profile" element={<OverView />} />
                     <Route path="setting" element={<Setting />} />
+                    <Route path="subadmins" element={<Subadmins />} />
                   </Route>
                   <Route path="formlist/create" element={<Form />} />
                   <Route path="formlist/view/:id" element={<ViewForm />} />
                   <Route path="formlist/editform/:id" element={<EditForm />} />
                   <Route path="users/createnew" element={<UserCreate />} />
-                  <Route path="users/edit-user/:id" element={<EditUser />} />
-                  <Route path="users/view-user/:id" element={<ViewUser />} />
+                  {users.userView === true ? (
+                    <Route path="users/view-user/:id" element={<ViewUser />} />
+                  ) : (
+                    ""
+                  )}
+                  {users.userEdit === true ? (
+                    <Route path="users/edit-user/:id" element={<EditUser />} />
+                  ) : (
+                    ""
+                  )}
+
                   <Route path="/create-category" element={<CreateProduct />} />
                   <Route path="/view/:id" element={<ListProduct />} />
                   <Route path="/create-product" element={<CreateNew />} />
-                  <Route path="/viewList/:id" element={<ViewProduct />} />
-                  <Route path="/editList/:id" element={<EditProduct />} />
+                  {users.productView === true ? (
+                    <Route path="/viewList/:id" element={<ViewProduct />} />
+                  ) : (
+                    ""
+                  )}
+                  {users.productsEdit === true ? (
+                    <Route path="/editList/:id" element={<EditProduct />} />
+                  ) : (
+                    ""
+                  )}
                   <Route path="/create-contact" element={<CreateContact />} />
                   <Route path="/view-contact/:id" element={<ViewContact />} />
                   <Route path="/edit-contact/:id" element={<EditContact />} />
@@ -93,6 +146,16 @@ function App() {
                         Choose the correct path{" "}
                         <div>
                           <h3>Error 404 page not found</h3>
+                        </div>
+                      </div>
+                    }
+                  />
+                  <Route
+                    path="/401"
+                    element={
+                      <div className="text-center mt-5">
+                        <div>
+                          <h3>Error 401 Unauthorized page</h3>
                         </div>
                       </div>
                     }

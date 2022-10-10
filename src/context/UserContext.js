@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useEffect, useMemo, useState } from "react";
+import request from "../api/api";
 const UserContext = createContext({
   users: {},
   setUserData: () => {},
@@ -7,12 +8,28 @@ const UserContext = createContext({
 
 const UserProvider = ({ children }) => {
   let userId = localStorage.getItem("id");
+  let role = localStorage.getItem("role");
   const [users, setUserData] = useState({});
   useEffect(() => {
-    fetchData();
+    if (role === "admin") {
+      fetchAdmin();
+    } else {
+      fetchSubAdmin();
+    }
   }, []);
-  async function fetchData() {
-    let user = await axios.get(`http://localhost:2022/getUser/${userId}`, {
+  async function fetchAdmin() {
+    request({
+      url: `getadmin/${userId}`,
+      method: "GET",
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      setUserData(res);
+    });
+  }
+  async function fetchSubAdmin() {
+    let user = await axios.get(`http://localhost:2022/getsubadmin/${userId}`, {
       headers: {
         Authorization: window.localStorage.getItem("myapptoken"),
       },

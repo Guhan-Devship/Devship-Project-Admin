@@ -1,10 +1,12 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Navbar from "../../Component/Navbar";
+import { UserContext } from "../../context/UserContext";
 
 function Order() {
+  const { users, setUserData } = useContext(UserContext);
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -104,6 +106,7 @@ function Order() {
                         <button
                           className="btn btn-outline-danger btn-sm ms-2"
                           onClick={() => handleDelete(data._id)}
+                          disabled={users.role !== "admin"}
                         >
                           Delete
                         </button>

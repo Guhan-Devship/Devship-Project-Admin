@@ -1,10 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Navbar from "../../Component/Navbar";
+import { UserContext } from "../../context/UserContext";
 
 function Product() {
+  const { users } = useContext(UserContext);
   const [category, setCategoryData] = useState([]);
   let navigate = useNavigate();
   const toastOptions = {

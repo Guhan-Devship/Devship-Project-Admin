@@ -42,7 +42,7 @@ function OverView() {
             </div>
             <div className="col-8">
               <h5>
-                {users.first_name} {users.surname}
+                {users.name} {users.last_name}
               </h5>
             </div>
           </div>
@@ -59,7 +59,7 @@ function OverView() {
               <div>Phone</div>
             </div>
             <div className="col-8">
-              <h5>{users.phone}</h5>
+              <h5>{users?.phone?.number}</h5>
             </div>
           </div>
         </form>

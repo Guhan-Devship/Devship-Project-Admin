@@ -1,30 +1,17 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 function Navbar() {
-  const [userData, setUserData] = useState([]);
   let navigate = useNavigate();
   let handleLogout = () => {
-    window.localStorage.removeItem("myapptoken", "name");
+    window.localStorage.removeItem("myapptoken", "id", "role");
     navigate("/");
     window.location.reload();
   };
-  let userId = window.localStorage.getItem("id");
-  async function fetchData() {
-    let user = await axios.get(`http://localhost:2022/getUser/${userId}`, {
-      headers: {
-        Authorization: window.localStorage.getItem("myapptoken"),
-      },
-    });
-    console.log(user.data);
-    setUserData(user.data);
-  }
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { users, setUserData } = useContext(UserContext);
 
-  let mobile = window.localStorage.getItem("mobile");
   return (
     <>
       <nav id="navbar-example2" class="navbar navbar-light topbar">
@@ -39,12 +26,11 @@ function Navbar() {
               aria-expanded="false"
             >
               <i class="fa fa-user" aria-hidden="true"></i>
-              {userData.first_name}
+              {users.name}
             </a>
             <div class="dropdown-menu">
-              <a class="dropdown-item">{userData.first_name}</a>
-              <a class="dropdown-item">{userData.phone}</a>
-              <a class="dropdown-item">{userData.email}</a>
+              <a class="dropdown-item">{users.name}</a>
+              <a class="dropdown-item">{users.email}</a>
               <Link to={"/profile"}>
                 <button className="btn btn-primary btn-sm mt-2 ms-2">
                   Edit

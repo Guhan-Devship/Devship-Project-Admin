@@ -18,13 +18,13 @@ function Profile() {
   const { users, setUserData } = useContext(UserContext);
   console.log(users);
   let completedPercentage = 100;
-  if (users.first_name === "") {
+  if (users.name === "") {
     completedPercentage = completedPercentage - 25;
   }
-  if (users.surname === "") {
+  if (users.last_name === "") {
     completedPercentage = completedPercentage - 25;
   }
-  if (users.phone === "") {
+  if (users?.phone?.number === "") {
     completedPercentage = completedPercentage - 25;
   }
   if (users.image === "") {
@@ -49,7 +49,7 @@ function Profile() {
             </div>
             <div className="col-8">
               <div className="m-2">
-                <h3>{users.first_name}</h3>
+                <h3>{users.name}</h3>
               </div>
 
               <div class="progress bar-width ">

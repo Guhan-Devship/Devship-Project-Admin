@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import request from "../api/api";
+import { identity } from "lodash";
 
 function Login() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ function Login() {
     if (handleValidation()) {
       const { password, email } = value;
       request({
-        url: `login`,
+        url: `admin/login`,
         method: "POST",
         data: value,
         headers: {
@@ -31,13 +32,13 @@ function Login() {
         },
       }).then((res) => {
         console.log(res);
-        if (res.response.message !== "Login Successfully") {
-          toast.error(res.response.message, toastOptions);
-        } else if (res.response.admin === false) {
-          toast.error("You are not allowed", toastOptions);
-        } else if (res.response.admin === true) {
+        if (res.status === 0) {
+          toast.error(res.response, toastOptions);
+        } else if (res.status === 1) {
+          toast.success(res.response.message, toastOptions);
           window.localStorage.setItem("myapptoken", res.response.authToken);
-          window.localStorage.setItem("id", res.response.id);
+          window.localStorage.setItem("id", res.response.userId);
+          window.localStorage.setItem("role", res.response.role);
           navigate("/dashboard");
           window.location.reload();
         }

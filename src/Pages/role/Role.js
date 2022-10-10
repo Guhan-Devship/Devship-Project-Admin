@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import request from "../../api/api";
 import CreateRole from "./CreateRole";
 import { ToastContainer, toast } from "react-toastify";
 import EditRole from "./EditRole";
+import { UserContext } from "../../context/UserContext";
 
 function Role() {
+  const { users } = useContext(UserContext);
   const [openModal, setOpenModal] = useState(false);
   const [openEditRole, setOpenEditRole] = useState(false);
   const [roleData, setRoleData] = useState([]);
@@ -85,7 +87,11 @@ function Role() {
             Role List<br></br>
           </h6>
           <p></p>
-          <button className="btn btn-primary btn-sm" onClick={handleClick}>
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={handleClick}
+            disabled={users.roleCreate !== true}
+          >
             Create Role
           </button>
         </div>
@@ -115,12 +121,14 @@ function Role() {
                           data-placement="bottom"
                           title="delete"
                           onClick={() => handleDelete(list._id)}
+                          disabled={users.roleDelete !== true}
                         >
                           Remove
                         </button>
                         <button
                           className="btn btn-outline-warning btn-sm ms-2"
                           onClick={() => handleEditClick(list._id)}
+                          disabled={users.roleEdit !== true}
                         >
                           Edit
                         </button>
