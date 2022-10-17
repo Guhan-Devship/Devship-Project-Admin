@@ -3,6 +3,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import request from "../../api/api";
 import { useObjectUrl } from "../../useObjectUrl";
+import FileSaver from "file-saver";
+import CreateFolder from "./CreateFolder";
 
 function Drive() {
   const toastOptions = {
@@ -14,6 +16,8 @@ function Drive() {
   };
   const [finalFiles, setFinalFiles] = useState({ files: [null] });
   const [listData, setListData] = useState([]);
+  const [folderData, setFolderData] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
   const onSelectFile = (event) => {
     const selectedFiles = event.target.files;
@@ -65,8 +69,21 @@ function Drive() {
       console.log(res);
     });
   };
+  let getFolder = async () => {
+    request({
+      url: `getfolder`,
+      method: "GET",
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      setFolderData(res);
+      console.log(res);
+    });
+  };
   useEffect(() => {
     getdata();
+    getFolder();
   }, []);
 
   let handleDelete = async (id, item) => {
@@ -97,6 +114,54 @@ function Drive() {
       console.log("Something went wrong");
     }
   };
+  let handleDeleteFolder = async (id, item) => {
+    try {
+      let ask = window.confirm(
+        "Are you sure, do you want to remove this Cart?"
+      );
+      if (ask) {
+        request({
+          url: `deleteFolder/${id}`,
+          method: "DELETE",
+          headers: {
+            Authorization: window.localStorage.getItem("myapptoken"),
+          },
+        }).then((res) => {
+          if (res.status !== 1) {
+            toast.error(res.message, toastOptions);
+          }
+          if (res.status === 1) {
+            toast.success(res.message, toastOptions);
+          }
+          getFolder();
+        });
+      }
+    } catch (error) {
+      console.log("Something went wrong");
+    }
+  };
+  const downloadFile = (url) => {
+    const fileURL = `http://localhost:2022/${url}`;
+    const ext = fileURL.split(".").at(-1);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", fileURL, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhr.responseType = "blob";
+    xhr.onload = () => {
+      const file = new Blob([xhr.response], {
+        type: `application/${ext}`,
+      });
+
+      FileSaver.saveAs(file, url);
+    };
+    xhr.send();
+  };
+
+  const handleClick = () => {
+    setOpenModal(true);
+  };
+
   return (
     <>
       <div className="card m-3">
@@ -118,8 +183,14 @@ function Drive() {
                   New +
                 </a>
                 <div class="dropdown-menu">
-                  <a class="dropdown-item">New Folder +</a>
-                  <a class="dropdown-item">upload folder</a>
+                  <div className="upload-btn-wrapper">
+                    <button
+                      class="btn-sm btn-primary mx-2"
+                      onClick={handleClick}
+                    >
+                      New Folder +
+                    </button>
+                  </div>
                   <div class="upload-btn-wrapper">
                     <button class="btn-sm btn-secondary mx-2">
                       Upload a file
@@ -154,6 +225,25 @@ function Drive() {
                 </tr>
               </thead>
               <tbody>
+                {folderData.map((folder) => {
+                  return (
+                    <tr>
+                      <td>
+                        <Link to={`/viewFolder/${folder._id}`}>
+                          {folder.folder_name}
+                        </Link>
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-sm btn-outline-danger"
+                          onClick={() => handleDeleteFolder(folder._id)}
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
                 {listData.map((data) => {
                   return data.files.map((e) => {
                     return (
@@ -173,6 +263,12 @@ function Drive() {
                           >
                             Remove
                           </button>
+                          <button
+                            className="btn btn-sm btn-outline-success ms-2"
+                            onClick={() => downloadFile(e)}
+                          >
+                            Download
+                          </button>
                         </td>
                       </tr>
                     );
@@ -182,6 +278,9 @@ function Drive() {
             </table>
           </div>
         </div>
+        {openModal && (
+          <CreateFolder setOpen={setOpenModal} getFolder={getFolder} />
+        )}
         <ToastContainer />
       </div>
     </>

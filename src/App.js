@@ -41,6 +41,7 @@ import Pricing from "./Pages/pricing/Pricing";
 import Subadmins from "./Pages/profile/subadmins/Subadmins";
 import { UserContext } from "./context/UserContext";
 import Drive from "./Pages/Drive/Drive";
+import ViewFolder from "./Pages/Drive/ViewFolder";
 
 function App() {
   let user = localStorage.getItem("myapptoken");
@@ -162,6 +163,7 @@ function App() {
                     ""
                   )}
 
+                  <Route path="/viewfolder/:id" element={<ViewFolder />} />
                   <Route path="/ref" element={<UseRef />} />
                   <Route path="/call" element={<UseCallBack />} />
                   <Route path="/form" element={<Form />} />
