@@ -330,11 +330,28 @@ input:checked + .slider:before {
   align-items: center;
   justify-content: center;
 }
+.pdfView {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.418);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .rContainer {
   background-color: white;
   padding: 20px;
   position: relative;
+}
+.pdfContainer {
+  background-color: white;
+  padding: 20px;
+  position: relative;
+  width: 600px;
 }
 
 .rClose {
@@ -342,6 +359,17 @@ input:checked + .slider:before {
   top: 0;
   right: 0;
   cursor: pointer;
+}
+#x {
+  position: relative;
+  float: right;
+  background: rgb(46, 46, 46);
+  color: white;
+  top: -34px;
+  right: -32px;
+}
+#x:hover {
+  background-color: rgb(196, 33, 33);
 }
 
 .rItem {
@@ -440,4 +468,9 @@ input:checked + .slider:before {
   left: 0;
   top: 0;
   opacity: 0;
+}
+
+.pdf-view {
+  cursor: pointer;
+  list-style: none;
 }

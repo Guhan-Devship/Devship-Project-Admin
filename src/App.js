@@ -42,6 +42,7 @@ import Subadmins from "./Pages/profile/subadmins/Subadmins";
 import { UserContext } from "./context/UserContext";
 import Drive from "./Pages/Drive/Drive";
 import ViewFolder from "./Pages/Drive/ViewFolder";
+import RequestLogin from "./login/RequestLogin";
 
 function App() {
   let user = localStorage.getItem("myapptoken");
@@ -163,7 +164,9 @@ function App() {
                     ""
                   )}
 
-                  <Route path="/viewfolder/:id" element={<ViewFolder />} />
+                  <Route path="/viewfolder/:id" element={<ViewFolder />}>
+                    <Route path=":id" element={<ViewFolder />} />
+                  </Route>
                   <Route path="/ref" element={<UseRef />} />
                   <Route path="/call" element={<UseCallBack />} />
                   <Route path="/form" element={<Form />} />
@@ -191,6 +194,10 @@ function App() {
                     }
                   />
                   <Route path="*" element={<Navigate replace to="/404" />} />
+                  <Route
+                    path="/login/subadmin/:uuid"
+                    element={<RequestLogin />}
+                  />
                 </Routes>
               </div>
             </div>

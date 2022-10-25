@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import request from "../../api/api";
 import Navbar from "../../Component/Navbar";
 import { UserContext } from "../../context/UserContext";
 
@@ -58,6 +59,26 @@ function User() {
     }
   };
 
+  const handleLoginAsClient = async (id, e) => {
+    e.preventDefault();
+
+    request({
+      url: `request-client-login/${id}`,
+      method: "POST",
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      if (res.status === 0) {
+        toast.error(res.message);
+      }
+
+      if (res.status === 1) {
+        const { uuid } = res.response;
+        window.open(`http://localhost:3000/login/client/${uuid}`, "_blank");
+      }
+    });
+  };
   return (
     <>
       <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -131,6 +152,16 @@ function User() {
                               View
                             </button>
                           </Link>
+                        ) : (
+                          ""
+                        )}
+                        {users.role === "admin" ? (
+                          <button
+                            className="btn btn-outline-success btn-sm ms-2"
+                            onClick={(e) => handleLoginAsClient(user._id, e)}
+                          >
+                            Login as
+                          </button>
                         ) : (
                           ""
                         )}

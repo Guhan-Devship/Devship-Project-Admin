@@ -9,6 +9,7 @@ const UserContext = createContext({
 const UserProvider = ({ children }) => {
   let userId = localStorage.getItem("id");
   let role = localStorage.getItem("role");
+  console.log(userId);
   const [users, setUserData] = useState({});
   useEffect(() => {
     if (role === "admin") {

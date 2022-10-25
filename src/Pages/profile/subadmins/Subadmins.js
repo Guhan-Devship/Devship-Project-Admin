@@ -99,6 +99,28 @@ function Subadmins() {
       alert("Something went wrong");
     }
   };
+
+  const handleLoginAsClient = async (id, e) => {
+    e.preventDefault();
+
+    request({
+      url: `request-subadmin-login/${id}`,
+      method: "POST",
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      if (res.status === 0) {
+        toast.error(res.message);
+      }
+
+      if (res.status === 1) {
+        const { uuid } = res.response;
+        console.log(uuid);
+        window.open(`http://localhost:3000/login/subadmin/${uuid}`, "_self");
+      }
+    });
+  };
   return (
     <>
       <div className="card m-3">
@@ -159,6 +181,12 @@ function Subadmins() {
                           onClick={() => handleViewClick(user._id)}
                         >
                           View
+                        </button>
+                        <button
+                          className="btn btn-outline-success btn-sm ms-2"
+                          onClick={(e) => handleLoginAsClient(user._id, e)}
+                        >
+                          Login as
                         </button>
                       </td>
                     </tr>

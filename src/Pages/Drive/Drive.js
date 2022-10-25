@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import request from "../../api/api";
 import { useObjectUrl } from "../../useObjectUrl";
 import FileSaver from "file-saver";
 import CreateFolder from "./CreateFolder";
+import Embed from "./Embed";
 
 function Drive() {
   const toastOptions = {
@@ -18,6 +19,8 @@ function Drive() {
   const [listData, setListData] = useState([]);
   const [folderData, setFolderData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [openPdf, setOpenPdf] = useState(false);
+  const [pdfId, setPdfId] = useState({});
 
   const onSelectFile = (event) => {
     const selectedFiles = event.target.files;
@@ -66,7 +69,6 @@ function Drive() {
       },
     }).then((res) => {
       setListData(res);
-      console.log(res);
     });
   };
   let getFolder = async () => {
@@ -162,6 +164,11 @@ function Drive() {
     setOpenModal(true);
   };
 
+  const handleDocumentClick = (e) => {
+    setPdfId(e);
+    setOpenPdf(true);
+  };
+
   return (
     <>
       <div className="card m-3">
@@ -230,6 +237,7 @@ function Drive() {
                     <tr>
                       <td>
                         <Link to={`/viewFolder/${folder._id}`}>
+                          <i class="fa fa-fw fa-folder"></i>
                           {folder.folder_name}
                         </Link>
                       </td>
@@ -249,12 +257,28 @@ function Drive() {
                     return (
                       <tr>
                         <td>
-                          <a
-                            href={`http://localhost:2022/${e}`}
-                            target="_blank"
-                          >
-                            {e}
-                          </a>
+                          {e.split(".").at(-1) === "jpg" ? (
+                            <img
+                              src={`http://localhost:2022/${e}`}
+                              className="product-image"
+                              onClick={() => handleDocumentClick(e)}
+                              alt="Preview"
+                            />
+                          ) : e.split(".").at(-1) === "pdf" ? (
+                            <a
+                              className="pdf-view"
+                              onClick={() => handleDocumentClick(e)}
+                            >
+                              {e}
+                            </a>
+                          ) : (
+                            <a
+                              href={`http://localhost:2022/${e}`}
+                              target="_blank"
+                            >
+                              {e}
+                            </a>
+                          )}
                         </td>
                         <td>
                           <button
@@ -281,8 +305,11 @@ function Drive() {
         {openModal && (
           <CreateFolder setOpen={setOpenModal} getFolder={getFolder} />
         )}
+        {openPdf && <Embed setOpenPdf={setOpenPdf} pdfId={pdfId} />}
+
         <ToastContainer />
       </div>
+      <Outlet />
     </>
   );
 }
